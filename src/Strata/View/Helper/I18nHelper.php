@@ -2,11 +2,11 @@
 namespace IP\Code\Strata\View\Helper;
 
 use Polyglot\Plugin\Polyglot;
+use IP\Code\Common\SlugTrait;
 
+class I18nHelper extends \Strata\View\Helper\Helper {
 
-class I18nHelper extends AppHelper {
-
-    use IP\Code\Common\SlugTrait;
+    use SlugTrait;
 
     private $polyglot;
 

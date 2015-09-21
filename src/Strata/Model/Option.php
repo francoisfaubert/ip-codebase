@@ -3,13 +3,12 @@ namespace IP\Code\Strata\Model;
 
 use IP\Code\Strata\Model\Entity\OptionEntity;
 use object;
-
 use Strata\Utility\Hash;
 
 /**
  * Class that eases pull out option values from Wordpress' option table.
  */
-class Option extends AppModel {
+class Option extends \Strata\Model\Model {
 
     public static function load($optionKey)
     {

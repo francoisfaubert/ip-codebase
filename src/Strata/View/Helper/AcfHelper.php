@@ -3,7 +3,7 @@ namespace IP\Code\Strata\View\Helper;
 
 use Strata\Strata;
 
-class AcfHelper extends AppHelper {
+class AcfHelper extends \Strata\View\Helper\Helper {
 
     private $cache = array();
     private $defaultId = null;
