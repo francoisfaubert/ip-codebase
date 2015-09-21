@@ -1,7 +1,7 @@
 <?php
-namespace IP\Code\Model;
+namespace IP\Code\Strata\Model;
 
-use IP\Code\Model\Entity\OptionEntity;
+use IP\Code\Strata\Model\Entity\OptionEntity;
 use object;
 
 use Strata\Utility\Hash;

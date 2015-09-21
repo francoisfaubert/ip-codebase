@@ -1,5 +1,5 @@
 <?php
-namespace IP\Code\Model;
+namespace IP\Code\Strata\Model;
 
 trait DateParserTrait {
 

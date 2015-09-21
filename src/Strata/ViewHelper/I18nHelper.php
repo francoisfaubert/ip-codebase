@@ -1,5 +1,5 @@
 <?php
-namespace IP\Code\View\Helper;
+namespace IP\Code\Strata\View\Helper;
 
 use Polyglot\Plugin\Polyglot;
 

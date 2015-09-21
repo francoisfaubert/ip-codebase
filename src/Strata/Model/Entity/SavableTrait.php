@@ -1,5 +1,5 @@
 <?php
-namespace IP\Code\Model\Entity;
+namespace IP\Code\Strata\Model\Entity;
 
 use Exception;
 

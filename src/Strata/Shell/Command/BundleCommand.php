@@ -1,5 +1,5 @@
 <?php
-namespace IP\Code\Shell\Command;
+namespace IP\Code\Strata\Shell\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
