@@ -3,9 +3,10 @@ namespace IP\Code\View\Helper;
 
 use Polyglot\Plugin\Polyglot;
 
+
 class I18nHelper extends AppHelper {
 
-    use SlugTrait;
+    use IP\Code\Common\SlugTrait;
 
     private $polyglot;
 
