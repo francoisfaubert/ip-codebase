@@ -1,0 +1,17 @@
+{
+    "name": "iprospect_ca/ip-codebase",
+    "description": "Commonly used idioms classes for iProspect Canada",
+    "authors": [
+        {
+            "name": "Francois Faubert",
+            "email": "francois.faubert@iprospect.com"
+        }
+    ],
+    "require": {},
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "IP\\Code\\": "src"
+        }
+    }
+}
