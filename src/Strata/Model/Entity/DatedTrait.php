@@ -28,9 +28,13 @@ trait DatedTrait {
             // $activityDate = explode("/", $this->getAcfDate());
             // return  mktime(0, 0, 0, $activityDate[1], $activityDate[0], $activityDate[2]);
 
-            // if the format is 20150916
             $activityDate = preg_match('/(\d{4})(\d{2})(\d{2})/', $this->getAcfDate(), $matches);
-            return  mktime(0, 0, 0, $activityDate[2], $activityDate[3], $activityDate[1]);
+
+            if (count($matches) !== 4) {
+                throw new Exception(sprintf("The ACF field %s on %s needs to be explicitly formatted 'Ymd'.", $this->getAcfDateKey(), basename($this)));
+            }
+
+            return  mktime(0, 0, 0, $matches[2], $matches[3], $matches[1]);
         }
     }
 
