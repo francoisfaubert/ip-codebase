@@ -22,7 +22,10 @@ trait DateParserTrait {
         return  mktime(0, 0, 0, $activityDate[2], $activityDate[3], $activityDate[1]) > time();
     }
 
-    protected $ACF_DATE_KEY = "acf_date";
+    protected function getAcfDateKey()
+    {
+        return "acf_date";
+    }
 
     /**
      * Date format must be the same as the ACF. Currently it's Ymd
@@ -32,7 +35,7 @@ trait DateParserTrait {
     public function byDate($date)
     {
         return $this->where('meta_query', array(array(
-            'key' => $this->ACF_DATE_KEY,
+            'key' => $this->getAcfDateKey(),
             'value' => $date,
             'compare' => '==',
             'type'      => 'DATE'
@@ -47,7 +50,7 @@ trait DateParserTrait {
 
         foreach ($dates as $date) {
             $queries[] = array(
-                'key' => $this->ACF_DATE_KEY,
+                'key' => $this->getAcfDateKey(),
                 'value' => $date,
                 'compare' => '==',
                 'type'      => 'DATE'
@@ -62,13 +65,13 @@ trait DateParserTrait {
         $queries = array(
             'relation' => 'AND',
             array(
-                'key' => $this->ACF_DATE_KEY,
+                'key' => $this->getAcfDateKey(),
                 'value' => $dateStart,
                 'compare' => '>=',
                 'type'      => 'DATE'
             ),
             array(
-                'key' => $this->ACF_DATE_KEY,
+                'key' => $this->getAcfDateKey(),
                 'value' => $dateEnd,
                 'compare' => '<=',
                 'type'      => 'DATE'
@@ -81,7 +84,7 @@ trait DateParserTrait {
     public function inTheFuture()
     {
         return $this->where('meta_query', array(
-            'key' => $this->ACF_DATE_KEY,
+            'key' => $this->getAcfDateKey(),
             'value' => date('Ymd'),
             'compare' => '>=',
             'type'      => 'DATE'
@@ -91,11 +94,28 @@ trait DateParserTrait {
     public function inThePast()
     {
         return $this->where('meta_query', array(
-            'key' => $this->ACF_DATE_KEY,
+            'key' => $this->getAcfDateKey(),
             'value' => date('Ymd'),
             'compare' => '<=',
             'type'      => 'DATE'
         ));
+    }
+
+    public function inTheFutureOrWithNoDates()
+    {
+        $this->orWhere('meta_query', array(
+            'key' => $this->getAcfDateKey(),
+            'value' => "",
+            'compare' => '=',
+        ));
+        $this->orWhere('meta_query', array(
+            'key' => $this->getAcfDateKey(),
+            'value' => $this->formatDate(),
+            'compare' => '>=',
+            'type'      => 'DATE'
+        ));
+
+        return $this;
     }
 
     public function findFuture()
