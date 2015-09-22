@@ -22,7 +22,7 @@ trait DateParserTrait {
         return  mktime(0, 0, 0, $activityDate[2], $activityDate[3], $activityDate[1]) > time();
     }
 
-    protected function getAcfDateKey()
+    public function getAcfDateKey()
     {
         return "acf_date";
     }
