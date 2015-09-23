@@ -31,7 +31,7 @@ trait DatedTrait {
             $activityDate = preg_match('/(\d{4})(\d{2})(\d{2})/', $this->getAcfDate(), $matches);
 
             if (count($matches) !== 4) {
-                throw new Exception(sprintf("The ACF field %s on %s needs to be explicitly formatted 'Ymd'.", $this->getAcfDateKey(), basename($this)));
+                throw new Exception(sprintf("The ACF field '%s' on '%s' needs to be explicitly formatted as 'Ymd'.", $this->getAcfDateKey(), get_class()));
             }
 
             return  mktime(0, 0, 0, $matches[2], $matches[3], $matches[1]);
