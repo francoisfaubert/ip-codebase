@@ -43,7 +43,7 @@
             </tr>
             <?php endforeach; ?>
         <?php else : ?>
-            <tr><td colspan="2"><?php _e("There have been no entries.", "ip"); ?></td></tr>
+            <tr><td colspan="3"><?php _e("There have been no entries.", "ip"); ?></td></tr>
         <?php endif; ?>
         </tbody>
     </table>

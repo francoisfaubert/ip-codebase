@@ -8,11 +8,12 @@
         $attributes = $entity->getSavableDisplayedAttributesSummaryView();
         $resultCount = $entity->getSavableEntriesCount();
         $ignoredEntityCount = $entity->getSavableEntriesIgnoredCount();
+        $labels = $entity->extractSavableAttributeLabels($attributes);
     ?>
     <table class="widefat fixed striped">
         <thead>
             <tr>
-                <?php foreach ($entity->extractSavableAttributeLabels($attributes) as $attributeKey => $label) : ?>
+                <?php foreach ($labels as $attributeKey => $label) : ?>
                     <th>
                         <?php echo $label; ?>
                     </th>
@@ -48,7 +49,7 @@
         </tr>
         <?php endforeach; ?>
     <?php else : ?>
-            <tr><td colspan="<?php echo count($attibutesLabels)+2; ?>"><?php _e("There have been no entries.", "ip"); ?></td></tr>
+            <tr><td colspan="<?php echo count($labels)+2; ?>"><?php _e("There have been no entries.", "ip"); ?></td></tr>
     <?php endif; ?>
 
         </tbody>

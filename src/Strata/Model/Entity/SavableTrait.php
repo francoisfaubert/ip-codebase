@@ -47,7 +47,7 @@ trait SavableTrait {
         $labels = array();
 
         foreach ($attributes as $key => $attributeConfig) {
-            $labels[$key] = $attributeConfig;
+            $labels[$key] = $key;
         }
 
         return $labels;
