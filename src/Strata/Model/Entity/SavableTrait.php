@@ -21,6 +21,16 @@ trait SavableTrait {
         $this->savableConfiguration = $config + $this->savableConfiguration;
     }
 
+    public function getSavablePageKey()
+    {
+        return "viewSavableEntries";
+    }
+
+    public function getSavableLink()
+    {
+        return admin_url('edit.php?post_type='.$this->getWordpressKey().'&page='.$this->getWordpressKey().'_'.$this->getSavablePageKey().'&postID='. $this->ID);
+    }
+
     public function getFreshResults()
     {
         $data = get_post_meta($this->getDatasourcePostId(), $this->DATA_DUMP_METAKEY, true);
