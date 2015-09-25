@@ -1,6 +1,7 @@
 <?php
 namespace IP\Code\Strata\Model\Entity;
 
+use IP\Code\Strata\Implementation\Savable\Model\SavableQuery;
 use Exception;
 
 trait SavableTrait {
@@ -12,7 +13,7 @@ trait SavableTrait {
 
     private $savableDump = null;
 
-    protected $savableConfiguration = array(
+    private $savableConfiguration = array(
         "unique_entries" => false
     );
 
@@ -26,43 +27,87 @@ trait SavableTrait {
         return "viewSavableEntries";
     }
 
+    public function getSavableEntityKey()
+    {
+        return $this->getWordpressKey();
+    }
+
     public function getSavableLink()
     {
-        return admin_url('edit.php?post_type='.$this->getWordpressKey().'&page='.$this->getWordpressKey().'_'.$this->getSavablePageKey().'&postID='. $this->ID);
+        return admin_url('edit.php?post_type='.$this->getSavableEntityKey().'&page='.$this->getSavableEntityKey().'_'.$this->getSavablePageKey().'&postID='. $this->ID);
     }
 
-    public function getFreshResults()
+    public function getSavableAttributes()
     {
-        $data = get_post_meta($this->getDatasourcePostId(), $this->DATA_DUMP_METAKEY, true);
-
-        if ($data == '') {
-            $data = $this->getDefaultSavableResultset();
-        }
-
-        $maybeUnserialized = maybe_unserialize($data);
-
-        // When a post is saved from the backend, the content gets cast as a regular string
-        // and no longer the WP serialized array.
-        if (is_string($maybeUnserialized)) {
-            return json_decode($maybeUnserialized, true);
-        }
-
-        return $maybeUnserialized;
+        return $this->getAttributes();
     }
 
+    public function extractSavableAttributeLabels($attributes)
+    {
+        $labels = array();
+
+        foreach ($attributes as $key => $attributeConfig) {
+            $labels[$key] = $attributeConfig;
+        }
+
+        return $labels;
+    }
+
+    public function extractSavableSubmissionAnswers($submission, $attributes)
+    {
+        $values = array();
+
+        foreach ($attributes as $key => $attributeConfig) {
+            $values[$key] = $submission->getAnswerFor($key);
+        }
+
+        return $values;
+    }
+
+    public function getSavableDisplayedAttributesSummaryView()
+    {
+        return $this->getSavableAttributes();
+    }
+
+    public function getSavableDisplayedAttributesDetailedView()
+    {
+        return $this->getSavableAttributes();
+    }
+
+    public function getQuestionsHash()
+    {
+        return $this->savableDump->getQuestionsHash();
+    }
 
     public function save(array $data)
     {
-        $this->saveUserPostData($data);
-        $this->saveFieldPostData($data);
+        if ($this->savableConfiguration['unique_entries']) {
+            if ($this->userIdHasPacticipated($userId)) {
+                throw new Exception(__("User has already participated.", "ip"));
+            }
+        }
 
-        return $this->updateResults();
+        // We expect this to come for a $this->request->data() call
+        // and there could be garbage input in there.
+        $ourData = $data[$this->getInputName()];
+        $parsedData = array();
+
+        foreach ($this->getSavableAttributes() as $key => $attributeConfig) {
+            $parsedData[$key] = $ourData[$key];
+        }
+
+        $userId = null;
+        if (array_key_exists("userentity", $data)) {
+            $userId = (int)$data["userentity"]["ID"];
+        }
+
+        return $this->getDump()->insert($userId, $parsedData);
     }
 
     private function getDump()
     {
         if (is_null($this->savableDump)) {
-            $this->savableDump = $this->getFreshResults();
+            $this->setDump(new SavableQuery($this));
         }
 
         return $this->savableDump;
@@ -75,108 +120,46 @@ trait SavableTrait {
 
     public function userHasPacticipated($wordpressUser)
     {
-        $dump = $this->getDump();
-
-        $userIds = array_keys($dump[$this->USERS_KEY]);
-        return in_array($wordpressUser->ID, $userIds);
+        return $this->userIdHasPacticipated($wordpressUser->ID);
     }
 
-    public function getSubmissions()
+    public function userIdHasPacticipated($userId)
     {
-        $dump = $this->getDump();
-        return $dump[$this->SUBMISSIONS];
+        return $this->getDump()->userHasPacticipated($userId);
     }
 
-    public function getParticipants()
+    public function getSavableParticipantIds()
     {
-        $dump = $this->getDump();
-        return $dump[$this->USERS_KEY];
+        return $this->getDump()->getParticipantIds();
     }
 
-    public function setSubmissions($value)
+    public function getSavableAnswersCount()
     {
-        $dump = $this->getDump();
-        $dump[$this->SUBMISSIONS] = $value;
-        $this->setDump($dump);
+        return $this->getDump()->getCount();
     }
 
-    public function setParticipants($value)
+    public function getSavableSubmissions($start = 0, $count = 20)
     {
-        $dump = $this->getDump();
-        $dump[$this->USERS_KEY] = $value;
-        $this->setDump($dump);
+        return $this->getDump()->getSubmissions($start, $count);
     }
 
-    public function getParticipantCount()
+    public function getSavableSubmission($id)
     {
-        return count($this->getParticipants());
+        return $this->getDump()->getSubmission($id);
     }
 
-    private function getDefaultSavableResultset()
+    public function getAllSavableEntries()
     {
-        return array(
-            $this->USERS_KEY => array(),
-            $this->SUBMISSIONS => array()
-        );
+        return $this->getDump()->getEntries();
     }
 
-    protected function updateResults()
+    public function getSavableEntriesIgnoredCount()
     {
-        $dump = $this->getDump();
-        return update_post_meta($this->getDatasourcePostId(), $this->DATA_DUMP_METAKEY, serialize($dump));
+        return $this->getDump()->getIgnoredCount();
     }
 
-    protected function getDatasourcePostId()
+    public function parseSavableAnswer($answer, $submission)
     {
-        return $this->ID;
-    }
-
-    /**
-     * Save the current user ID if it was sent as POST data. Otherwise
-     * generate a unique or serial id for the user depending on the settings.
-     * @param  [type] $data [description]
-     * @return [type]       [description]
-     */
-    protected function saveUserPostData($data)
-    {
-
-        if (array_key_exists("userentity", $data)) {
-            $userID = (int)$data["userentity"]["ID"];
-
-            $participants = $this->getParticipants();
-            $participants[$userID] = $data["userentity"]["display_name"];
-
-            $this->setParticipants($participants);
-        }
-    }
-
-    // Loop through posted values and add 1 to the current values if
-    // they pass validation.
-    protected function saveFieldPostData($data)
-    {
-        $workingResults = $this->getSubmissions();
-
-        $userID = $this->generateUserId($data);
-        if ($this->savableConfiguration['unique_entries']) {
-            if (array_key_exists($userID, $workingResults)) {
-                throw new Exception("User has already participated.");
-            }
-        } else {
-            $userID = $userID . "@" . time();
-        }
-
-        $workingResults[$userID] = array();
-        $ourData = $data[$this->getInputName()];
-
-        foreach ($this->getAttributes() as $questionIdx => $choice) {
-            $workingResults[$userID][$questionIdx] = $ourData[$questionIdx];
-        }
-
-        $this->setSubmissions($workingResults);
-    }
-
-    protected function generateUserId($data)
-    {
-        return (array_key_exists("userentity", $data)) ? (int)$data["userentity"]["ID"] : $_SERVER['REMOTE_ADDR'];
+        return $answer->field_value;
     }
 }
