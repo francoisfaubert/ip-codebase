@@ -8,7 +8,6 @@
         $attributes = $entity->getSavableDisplayedAttributesSummaryView();
         $resultCount = $entity->getSavableEntriesCount();
         $ignoredEntityCount = $entity->getSavableEntriesIgnoredCount();
-
     ?>
     <table class="widefat fixed striped">
         <thead>
