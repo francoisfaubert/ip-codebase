@@ -133,7 +133,7 @@ trait SavableTrait {
         return $this->getDump()->getParticipantIds();
     }
 
-    public function getSavableAnswersCount()
+    public function getSavableEntriesCount()
     {
         return $this->getDump()->getCount();
     }
