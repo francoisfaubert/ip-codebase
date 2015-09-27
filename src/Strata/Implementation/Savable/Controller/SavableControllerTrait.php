@@ -37,6 +37,7 @@ trait SavableControllerTrait {
 
         $entity = $this->getSavableEntity(get_post($postId));
         $this->view->set("entity", $entity);
+        $this->view->set("datasourceEntity", $entity->getSavableDatasourceEntity());
 
         $submission = $entity->getSavableSubmission($entryId);
         $this->view->set("submission", $submission);
@@ -58,7 +59,7 @@ trait SavableControllerTrait {
     protected function viewSavableEntriesList()
     {
         $querier = new SavableQuery();
-        $this->view->set("recentEntities", $querier->getPage(0, 20));
+        $this->view->set("recentEntities", $querier->getPage(0, 20, $this->request->get("post_type")));
 
         $templateFile = $this->getSavableListTemplatePath();
 
@@ -80,6 +81,7 @@ trait SavableControllerTrait {
         $entity = $this->getSavableEntity(get_post($postId));
 
         $this->view->set("entity", $entity);
+        $this->view->set("datasourceEntity", $entity->getSavableDatasourceEntity());
 
         $templateFile = $this->getSavableSummaryTemplatePath();
 

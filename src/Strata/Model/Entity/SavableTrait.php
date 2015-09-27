@@ -6,15 +6,13 @@ use Exception;
 
 trait SavableTrait {
 
-    protected $USERS_KEY = "user_entries";
-    protected $DATA_KEY = "user_data";
-    protected $SUBMISSIONS = "submissions";
-    protected $DATA_DUMP_METAKEY = "savable_dump";
-
     private $savableDump = null;
 
     private $savableConfiguration = array(
-        "unique_entries" => false
+        "unique_entries" => false,
+        "admin_page_key" => "",
+        "entity_key"     => null,
+        "entity_post_key"     => null
     );
 
     public function configureSavable($config = array())
@@ -22,24 +20,42 @@ trait SavableTrait {
         $this->savableConfiguration = $config + $this->savableConfiguration;
     }
 
-    public function getSavablePageKey()
-    {
-        return "viewSavableEntries";
-    }
-
     public function getSavableEntityKey()
     {
+        if (!is_null($this->savableConfiguration["entity_key"])) {
+            return $this->savableConfiguration["entity_key"];
+        }
+
         return $this->getWordpressKey();
+    }
+
+    public function getSavableEntityPostKey()
+    {
+        if (!is_null($this->savableConfiguration["entity_post_key"])) {
+            return $this->savableConfiguration["entity_post_key"];
+        }
+
+        return $this->getInputName();
+    }
+
+    public function getSavableValidatingEntity()
+    {
+        return $this;
+    }
+
+    public function getSavableDatasourceEntity()
+    {
+        return $this;
     }
 
     public function getSavableLink()
     {
-        return admin_url('edit.php?post_type='.$this->getSavableEntityKey().'&page='.$this->getSavableEntityKey().'_'.$this->getSavablePageKey().'&postID='. $this->ID);
+        return admin_url('edit.php?post_type='.$this->getSavableEntityKey().'&page='.$this->getSavableEntityKey().'_viewSavableEntries&postID='. $this->ID);
     }
 
     public function getSavableAttributes()
     {
-        return $this->getAttributes();
+        return $this->getSavableValidatingEntity()->getAttributes();
     }
 
     public function extractSavableAttributeLabels($attributes)
@@ -89,7 +105,7 @@ trait SavableTrait {
 
         // We expect this to come for a $this->request->data() call
         // and there could be garbage input in there.
-        $ourData = $data[$this->getInputName()];
+        $ourData = $data[$this->getSavableEntityPostKey()];
         $parsedData = array();
 
         foreach ($this->getSavableAttributes() as $key => $attributeConfig) {
@@ -107,7 +123,7 @@ trait SavableTrait {
     private function getDump()
     {
         if (is_null($this->savableDump)) {
-            $this->setDump(new SavableQuery($this));
+            $this->setDump(new SavableQuery($this->getSavableDatasourceEntity()));
         }
 
         return $this->savableDump;

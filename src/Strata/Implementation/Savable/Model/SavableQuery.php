@@ -205,7 +205,7 @@ class SavableQuery {
         return $this->inputHash;
     }
 
-    public function getPage($start = 0, $length = 20)
+    public function getPage($start = 0, $length = 20, $postType)
     {
         $this->logger->logQueryStart();
 
@@ -213,9 +213,10 @@ class SavableQuery {
         $results = $wpdb->get_results($wpdb->prepare("
             SELECT *
             FROM {$wpdb->prefix}ip_savable
+            WHERE post_type = %s
             ORDER BY {$wpdb->prefix}ip_savable.created DESC
             LIMIT %d, %d
-        ", $start, $length));
+        ", $postType, $start, $length));
 
         $this->logger->logQueryCompletion($wpdb->last_query);
 

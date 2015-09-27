@@ -2,7 +2,7 @@
 
     <h1><?php echo $entityLabel; ?></h1>
 
-    <h3><a href="<?php echo admin_url('post.php?post='.$entity->ID.'&action=edit'); ?>"><?php echo $entity->post_title; ?></a></h3>
+    <h3><a href="<?php echo admin_url('post.php?post='.$datasourceEntity->ID.'&action=edit'); ?>"><?php echo $datasourceEntity->post_title; ?></a></h3>
 
     <?php
         $attributes = $entity->getSavableDisplayedAttributesSummaryView();
@@ -23,13 +23,16 @@
             </tr>
         </thead>
         <tbody>
-
     <?php if ($resultCount > 0) : ?>
         <?php foreach ($entity->getSavableSubmissions() as $submission) : ?>
         <tr>
             <?php foreach ($entity->extractSavableSubmissionAnswers($submission, $attributes)  as $attributeKey => $answer) : ?>
                 <td>
-                    <?php echo $entity->parseSavableAnswer($answer, $submission); ?>
+                    <?php if ($answer) : ?>
+                        <?php echo $entity->parseSavableAnswer($answer, $submission); ?>
+                    <?php else : ?>
+                        --
+                    <?php endif; ?>
                 </td>
             <?php endforeach; ?>
 

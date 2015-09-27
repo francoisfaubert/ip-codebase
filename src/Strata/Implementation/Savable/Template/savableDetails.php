@@ -2,7 +2,7 @@
 
     <h1><?php echo $entityLabel; ?></h1>
 
-    <h3><a href="<?php echo admin_url('post.php?post='.$entity->ID.'&action=edit'); ?>"><?php echo $entity->post_title; ?></a></h3>
+    <h3><a href="<?php echo admin_url('post.php?post='.$datasourceEntity->ID.'&action=edit'); ?>"><?php echo $datasourceEntity->post_title; ?></a></h3>
 
     <?php
         $attributes = $entity->getSavableDisplayedAttributesDetailedView();
@@ -23,8 +23,8 @@
                 <?php $user = get_userdata($submission->user_ID); ?>
                 <a href="<?php echo get_edit_user_link($submission->user_ID); ?>"><?php echo $user->display_name; ?></a>
             <?php else : ?>
-                <?php echo sprintf(__("an Unregistered (%s)", "ip"), $submission->user_ip); ?>
-            <?php endif; ?>
+                <?php echo sprintf(__("an unregistered user using the ip %s", "ip"), $submission->user_ip); ?>
+            <?php endif; ?>.
         </p>
 
         <table class="widefat fixed striped">
