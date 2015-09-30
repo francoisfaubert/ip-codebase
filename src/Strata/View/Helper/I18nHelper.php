@@ -3,6 +3,7 @@ namespace IP\Code\Strata\View\Helper;
 
 use Polyglot\Plugin\Polyglot;
 use IP\Code\Common\SlugTrait;
+use Strata\Strata;
 
 class I18nHelper extends \Strata\View\Helper\Helper {
 
@@ -40,6 +41,15 @@ class I18nHelper extends \Strata\View\Helper\Helper {
         $translatedPost = $locale->getTranslatedPost();
         if ($translatedPost) {
             return get_permalink($translatedPost->ID);
+        }
+
+        if ((bool)Strata::app()->getConfig("i18n.default_locale_fallback")) {
+            $defaultLocale = $this->getDefaultLocale();
+            $originalPost = $defaultLocale->getTranslatedPost(get_the_ID());
+            if ($originalPost) {
+                $originalUrl = get_permalink($originalPost);
+                return str_replace(WP_HOME . "/", WP_HOME . "/" . $locale->getUrl() . "/", $originalUrl);
+            }
         }
 
         return $locale->getHomeUrl();
