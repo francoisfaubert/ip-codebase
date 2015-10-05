@@ -2,7 +2,7 @@
 namespace IP\Code\Strata\Implementation\Savable\Controller;
 
 use Strata\Model\CustomPostType\ModelEntity;
-use Strata\Model\CustomPostType\Entity;
+use Strata\Model\CustomPostType\CustomPostType;
 use Strata\Model\CustomPostType\LabelParser;
 use Strata\View\Template;
 
@@ -111,7 +111,7 @@ trait SavableControllerTrait {
     {
         $name = $this->getRelatedEntityName();
 
-        $model = Entity::factory($name);
+        $model = CustomPostType::factory($name);
         $labelParser = new LabelParser($model);
         $labelParser->parse();
 
