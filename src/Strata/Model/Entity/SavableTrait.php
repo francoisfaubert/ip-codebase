@@ -136,12 +136,12 @@ trait SavableTrait {
 
     public function userHasParticipated($wordpressUser)
     {
-        return $this->userIdHasPacticipated($wordpressUser->ID);
+        return $this->userIdHasParticipated($wordpressUser->ID);
     }
 
-    public function userIdHasPacticipated($userId)
+    public function userIdHasParticipated($userId)
     {
-        return $this->getDump()->userHasPacticipated($userId);
+        return $this->getDump()->userHasParticipated($userId);
     }
 
     public function getSavableParticipantIds()

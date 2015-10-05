@@ -108,7 +108,7 @@ class SavableQuery {
         return (int)$count;
     }
 
-    public function userHasPacticipated($userId)
+    public function userHasParticipated($userId)
     {
         $this->logger->logQueryStart();
 
