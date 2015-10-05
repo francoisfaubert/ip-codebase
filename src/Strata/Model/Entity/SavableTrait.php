@@ -134,7 +134,7 @@ trait SavableTrait {
         return $this->savableDump = $dump;
     }
 
-    public function userHasPacticipated($wordpressUser)
+    public function userHasParticipated($wordpressUser)
     {
         return $this->userIdHasPacticipated($wordpressUser->ID);
     }
