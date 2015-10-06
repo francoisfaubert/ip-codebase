@@ -86,7 +86,7 @@ trait DateParserTrait {
         return $this->where('meta_query', array(
             'key' => $this->getAcfDateKey(),
             'value' => date('Ymd'),
-            'compare' => '>=',
+            'compare' => '>',
             'type'      => 'DATE'
         ));
     }
@@ -96,7 +96,7 @@ trait DateParserTrait {
         return $this->where('meta_query', array(
             'key' => $this->getAcfDateKey(),
             'value' => date('Ymd'),
-            'compare' => '<=',
+            'compare' => '<',
             'type'      => 'DATE'
         ));
     }
