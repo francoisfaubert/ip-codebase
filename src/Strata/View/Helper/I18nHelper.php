@@ -9,7 +9,7 @@ class I18nHelper extends \Strata\View\Helper\Helper {
 
     use SlugTrait;
 
-    private $polyglot;
+    protected $polyglot;
 
     function __construct()
     {
