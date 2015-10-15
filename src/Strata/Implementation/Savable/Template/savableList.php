@@ -32,7 +32,11 @@
                 <td>
                      <?php if ((int)$row->user_ID > 0) : ?>
                         <?php $user = get_userdata($row->user_ID); ?>
-                        <a href="<?php echo get_edit_user_link($row->user_ID); ?>"><?php echo $user->display_name; ?></a>
+                        <?php if ($user) : ?>
+                            <a href="<?php echo get_edit_user_link($row->user_ID); ?>"><?php echo $user->display_name; ?></a>
+                        <?php else : ?>
+                            [DELETED]
+                        <?php endif; ?>
                      <?php else : ?>
                         <?php echo sprintf(__("Unregistered (%s)", "ip"), $row->user_ip); ?>
                      <?php endif; ?>
