@@ -81,22 +81,22 @@ trait DateParserTrait {
         return $this->where('meta_query', $queries);
     }
 
-    public function inTheFuture()
+    public function inTheFuture($compare = '>')
     {
         return $this->where('meta_query', array(
             'key' => $this->getAcfDateKey(),
             'value' => date('Ymd'),
-            'compare' => '>',
+            'compare' => $compare,
             'type'      => 'DATE'
         ));
     }
 
-    public function inThePast()
+    public function inThePast($compare = '<')
     {
         return $this->where('meta_query', array(
             'key' => $this->getAcfDateKey(),
             'value' => date('Ymd'),
-            'compare' => '<',
+            'compare' => $compare,
             'type'      => 'DATE'
         ));
     }
