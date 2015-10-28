@@ -98,7 +98,7 @@ trait SavableTrait {
     public function save(array $data)
     {
         if ($this->savableConfiguration['unique_entries']) {
-            if ($this->userIdHasPacticipated($userId)) {
+            if ($this->userIdHasParticipated($userId)) {
                 throw new Exception(__("User has already participated.", "ip"));
             }
         }
