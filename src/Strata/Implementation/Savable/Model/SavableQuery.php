@@ -234,6 +234,7 @@ class SavableQuery {
             WHERE post_ID = %d
             AND post_type = %s
             AND input_hash = %s
+            ORDER BY ID
             LIMIT %d, %d
         ", $this->associatedEntity->ID, $this->associatedEntity->post_type, $this->inputHash, $start, $length));
 
@@ -296,6 +297,24 @@ class SavableQuery {
             AND post_type = %s
             AND input_hash = %s
         ", $this->associatedEntity->ID, $this->associatedEntity->post_type, $this->inputHash));
+
+        $this->logger->logQueryCompletion($wpdb->last_query);
+
+        return $this->resultsToAnswerEntities($results);
+    }
+
+    public function getLatestEntries()
+    {
+        $this->logger->logQueryStart();
+
+        $entries = $this->getSubmissions(1, 1);
+
+        global $wpdb;
+        $results = $wpdb->get_results($wpdb->prepare("
+            SELECT *
+            FROM {$wpdb->prefix}ip_savable_field
+            WHERE {$wpdb->prefix}ip_savable_field.savable_ID = %s
+        ", $entries[0]->ID));
 
         $this->logger->logQueryCompletion($wpdb->last_query);
 
