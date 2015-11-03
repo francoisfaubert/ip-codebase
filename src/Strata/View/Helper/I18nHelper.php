@@ -38,27 +38,43 @@ class I18nHelper extends \Strata\View\Helper\Helper {
 
     public function getCurrentUrlIn($locale)
     {
-        $url = $locale->getHomeUrl();
-
+        $currentLocale = $this->getCurrentLocale();
         $translatedPost = $locale->getTranslatedPost();
+
         if ($translatedPost) {
-            $url = get_permalink($translatedPost->ID);
+            if ((bool)Strata::app()->getConfig("i18n.default_locale_fallback")) {
+                $replace = WP_HOME . "/" . $currentLocale->getUrl() . "/";
+                $replacement = $locale->isDefault() ?
+                    WP_HOME . "/" :
+                    WP_HOME . "/" . $locale->getUrl() . "/";
+
+                return str_replace($replace, $replacement, get_permalink($translatedPost->ID));
+            }
+
+            return get_permalink($translatedPost->ID);
         }
 
         if ((bool)Strata::app()->getConfig("i18n.default_locale_fallback")) {
-            $currentLocale = $this->getCurrentLocale();
-            if ($locale->isDefault()) {
-                return str_replace(WP_HOME . "/" . $currentLocale->getUrl() . "/", WP_HOME . "/", $url);
-            }
 
-            $defaultLocale = $this->getDefaultLocale();
-            $originalPost = $defaultLocale->getTranslatedPost(get_the_ID());
+            $originalPost = $this->getDefaultLocale()->getTranslatedPost(get_the_ID());
             if ($originalPost) {
-                $originalUrl = get_permalink($originalPost);
-                return str_replace(WP_HOME . "/" . $currentLocale->getUrl() . "/", WP_HOME . "/" . $locale->getUrl() . "/", $originalUrl);
-            }
 
-            return str_replace(WP_HOME . "/" . $currentLocale->getUrl() . "/", WP_HOME . "/" . $locale->getUrl() . "/", $url);
+                $originalUrl = get_permalink($originalPost);
+
+                if ($currentLocale->isDefault()) {
+                    $replace = WP_HOME . "/";
+                } else {
+                    $replace = WP_HOME . "/" . $currentLocale->getUrl() . "/";
+                }
+
+                if ($locale->isDefault()) {
+                    $replacement = WP_HOME . "/";
+                } else {
+                    $replacement = WP_HOME . "/" . $locale->getUrl() . "/";
+                }
+
+                return str_replace($replace, $replacement, $originalUrl);
+            }
         }
 
         return $locale->getHomeUrl();
