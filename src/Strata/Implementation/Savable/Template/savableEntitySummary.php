@@ -9,7 +9,59 @@
         $resultCount = $entity->getSavableEntriesCount();
         $ignoredEntityCount = $entity->getSavableEntriesIgnoredCount();
         $labels = $entity->extractSavableAttributeLabels($attributes);
+
+        $itemsPerPage = 20;
+
+        $currentPage = array_key_exists('savablePage', $_GET) ? (int)$_GET['savablePage'] : 1;
+        if ($currentPage === 0) {
+            $currentPage = 1;
+        }
+
+        $previousPage = $currentPage - 1;
+        if ($previousPage < 1) {
+            $previousPage = 1;
+        }
+
+        $lastPage =  ceil($resultCount / $itemsPerPage);
+        $nextPage = $currentPage + 1;
+        if ($nextPage > $lastPage) {
+            $nextPage = $lastPage;
+        }
+
     ?>
+
+    <?php if ($resultCount > 0) : ?>
+        <?php $nbPages = ceil($resultCount / $itemsPerPage); ?>
+        <div class="tablenav top">
+            <div class="tablenav-pages">
+                <span class="displaying-num"><?php echo $resultCount; ?> items</span>
+                <span class="pagination-links">
+                    <a class="first-page" href="<?php echo $editUrlBase; ?>&amp;postID=<?php echo $datasourceEntity->ID; ?>">
+                        <span class="screen-reader-text">First page</span>
+                        <span aria-hidden="true">«</span>
+                    </a>
+                    <a class="previous-page" href="<?php echo $editUrlBase; ?>&amp;postID=<?php echo $datasourceEntity->ID; ?>&amp;savablePage=<?php echo $previousPage; ?>">
+                        <span class="screen-reader-text">Previous page</span>
+                        <span aria-hidden="true">‹</span>
+                    </a>
+                    <span class="paging-input">
+                        <label for="current-page-selector" class="screen-reader-text">Current Page</label>
+                        <?php echo $currentPage; ?> of <span class="total-pages"><?php echo $nbPages; ?></span>
+                    </span>
+                    <a class="next-page" href="<?php echo $editUrlBase; ?>&amp;postID=<?php echo $datasourceEntity->ID; ?>&amp;savablePage=<?php echo $nextPage; ?>">
+                        <span class="screen-reader-text">Next page</span>
+                        <span aria-hidden="true">›</span>
+                    </a>
+                    <a class="first-page" href="<?php echo $editUrlBase; ?>&amp;postID=<?php echo $datasourceEntity->ID; ?>&amp;savablePage=<?php echo $lastPage; ?>">
+                        <span class="screen-reader-text">Last page</span>
+                        <span aria-hidden="true">»</span>
+                    </a>
+                </span>
+            </div>
+        </div>
+    <?php endif; ?>
+
+
     <table class="widefat fixed striped">
         <thead>
             <tr>
@@ -24,7 +76,13 @@
         </thead>
         <tbody>
     <?php if ($resultCount > 0) : ?>
-        <?php foreach ($entity->getSavableSubmissions() as $submission) : ?>
+
+        <?php
+            $start = ($currentPage-1) * $itemsPerPage;
+            $end = $start + $itemsPerPage;
+        ?>
+
+        <?php foreach ($entity->getSavableSubmissions($start, $end  ) as $submission) : ?>
         <tr>
             <?php foreach ($entity->extractSavableSubmissionAnswers($submission, $attributes)  as $attributeKey => $answer) : ?>
                 <td>
@@ -57,6 +115,7 @@
 
         </tbody>
     </table>
+
 
     <p style="font-size:0.8em; color: #bbb">
         <?php echo sprintf(__("The content is based on the questions set '%s'.", 'ip'), $entity->getQuestionsHash()); ?>

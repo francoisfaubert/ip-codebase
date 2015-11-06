@@ -234,7 +234,7 @@ class SavableQuery {
             WHERE post_ID = %d
             AND post_type = %s
             AND input_hash = %s
-            ORDER BY ID
+            ORDER BY ID DESC
             LIMIT %d, %d
         ", $this->associatedEntity->ID, $this->associatedEntity->post_type, $this->inputHash, $start, $length));
 

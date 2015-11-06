@@ -26,7 +26,7 @@ class SavableSubmissionEntity extends \Strata\Model\CustomPostType\ModelEntity {
     public function getAnswerFor($attributeKey)
     {
         foreach ($this->getAnswers() as $answer) {
-            if ($answer->field_key === $attributeKey) {
+            if (preg_match("/^" . $attributeKey . "/", $answer->field_key)) {
                 return $answer;
             }
         }
