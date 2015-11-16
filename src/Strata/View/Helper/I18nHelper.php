@@ -103,6 +103,6 @@ class I18nHelper extends \Strata\View\Helper\Helper {
             return $currentId === $homepageId;
         }
 
-        return $locale->isTranslationOfPost($homepageId);
+        return $this->getOriginalId($currentId) === $homepageId;
     }
 }
