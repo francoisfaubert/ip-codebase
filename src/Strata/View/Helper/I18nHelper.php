@@ -95,8 +95,14 @@ class I18nHelper extends \Strata\View\Helper\Helper {
 
     public function isFrontPage()
     {
+        $currentId = (int)get_the_ID();
         $locale = $this->getCurrentLocale();
         $homepageId = $this->polyglot->query()->getDefaultHomepageId();
+
+        if ($locale->isDefault()) {
+            return $currentId === $homepageId;
+        }
+
         return $locale->isTranslationOfPost($homepageId);
     }
 }
