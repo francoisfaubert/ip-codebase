@@ -93,6 +93,20 @@ class I18nHelper extends \Strata\View\Helper\Helper {
         return $pageId;
     }
 
+
+    public function getOriginalId($pageId)
+    {
+        if ($pageId) {
+            $defaultLocale = $this->getDefaultLocale();
+            $translation = $defaultLocale->getTranslatedPost($pageId);
+            if ($translation) {
+                return $translation->ID;
+            }
+        }
+
+        return $pageId;
+    }
+
     public function isFrontPage()
     {
         $currentId = (int)get_the_ID();
