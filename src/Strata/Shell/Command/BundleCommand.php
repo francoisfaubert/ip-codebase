@@ -62,6 +62,10 @@ class BundleCommand extends \Strata\Shell\Command\StrataCommand {
         if ($this->hasGrunt($themePath)) {
             $this->buildGrunt($themePath);
         }
+        
+        if ($this->hasGulp($themePath)) {
+            $this->buildGulp($themePath);
+        }
     }
 
     private function hasNpm($themePath)
@@ -77,6 +81,11 @@ class BundleCommand extends \Strata\Shell\Command\StrataCommand {
     private function hasGrunt($themePath)
     {
         return file_exists($themePath . "Gruntfile.js");
+    }
+    
+    private function hasGulp($themePath)
+    {
+        return file_exists($themePath . "gulpfile.js");
     }
 
     private function buildNpm($themePath)
@@ -100,5 +109,14 @@ class BundleCommand extends \Strata\Shell\Command\StrataCommand {
 
         $command = WP_ENV === "development" ? "staging" : WP_ENV;
         system("cd $themePath && grunt " . $command);
+    }
+    
+    private function buildGulp($themePath)
+    {
+        $this->output->writeln("Running <info>Gulp</info> for current environment (".WP_ENV.")...");
+        $this->nl();
+
+        $command = WP_ENV === "production" ? "--production" : "";
+        system("cd $themePath && gulp " . $command);
     }
 }
