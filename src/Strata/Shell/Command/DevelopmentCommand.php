@@ -1,8 +1,7 @@
 <?php
-namespace App\Shell\Command;
+namespace IP\Code\Strata\Shell\Command;
 
 use Strata\Shell\Command\StrataCommand;
-use Strata\Shell\Command\ServerCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
