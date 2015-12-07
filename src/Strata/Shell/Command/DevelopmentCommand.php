@@ -18,22 +18,37 @@ class DevelopmentCommand extends StrataCommand
     {
         $this->startup($input, $output);
 		
-		$this->output->writeln('Launching a development server...');
-		$output->writeln('Press <info>CTRL + C</info> to exit');
-		$this->nl();
-		$this->nl();
-        
         if ($this->isKnownGulp()) {
-            $this->startDetachedPHPServer();
-            $this->startGulpWatch();
+            $this->executeGulpTask();
 		} elseif ($this->isKnownGrunt()) {
-            $this->startDetachedPHPServer();
-            $this->startGruntWatch();
+            $this->executeGruntTask();
         } else {     
-			$this->output->writeln("This project's configuration does not allow the use of the 'development' command.");
+			$output->writeln("This project's configuration does not allow the use of the 'development' command.");
 		}
         
         $this->shutdown();
+    }
+    
+    private function executeGulpTask()
+    {
+        $output->writeln('Launching a development server...');
+        $output->writeln('Press <info>CTRL + C</info> to exit');
+        $this->nl();
+        $this->nl(); 
+                   
+        $this->startDetachedPHPServer();
+        $this->startGulpWatch();
+    }
+    
+    private function executeGruntTask()
+    {
+        $output->writeln('A webserver is now available at <info>http://127.0.0.1:5454/</info>');
+        $output->writeln('Press <info>CTRL + C</info> to exit');
+        $this->nl();
+        $this->nl(); 
+        
+        $this->startDetachedPHPServer();
+        $this->startGruntWatch();
     }
     
     private function startPHPServer()
