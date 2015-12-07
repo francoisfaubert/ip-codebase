@@ -97,6 +97,11 @@ trait SavableTrait {
 
     public function save(array $data)
     {
+        $userId = null;
+        if (array_key_exists("userentity", $data)) {
+            $userId = (int)$data["userentity"]["ID"];
+        }
+        
         if ($this->savableConfiguration['unique_entries']) {
             if ($this->userIdHasParticipated($userId)) {
                 throw new Exception(__("User has already participated.", "ip"));
@@ -110,11 +115,6 @@ trait SavableTrait {
 
         foreach ($this->getSavableAttributes() as $key => $attributeConfig) {
             $parsedData[$key] = $ourData[$key];
-        }
-
-        $userId = null;
-        if (array_key_exists("userentity", $data)) {
-            $userId = (int)$data["userentity"]["ID"];
         }
 
         return $this->getDump()->insert($userId, $parsedData);
