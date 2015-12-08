@@ -31,8 +31,8 @@ class DevelopmentCommand extends StrataCommand
     
     private function executeGulpTask()
     {
-        $output->writeln('Launching a development server...');
-        $output->writeln('Press <info>CTRL + C</info> to exit');
+        $this->output->writeln('Launching a development server...');
+        $this->output->writeln('Press <info>CTRL + C</info> to exit');
         $this->nl();
         $this->nl(); 
                    
@@ -42,8 +42,8 @@ class DevelopmentCommand extends StrataCommand
     
     private function executeGruntTask()
     {
-        $output->writeln('A webserver is now available at <info>http://127.0.0.1:5454/</info>');
-        $output->writeln('Press <info>CTRL + C</info> to exit');
+        $this->output->writeln('A webserver is now available at <info>http://127.0.0.1:5454/</info>');
+        $this->output->writeln('Press <info>CTRL + C</info> to exit');
         $this->nl();
         $this->nl(); 
         
