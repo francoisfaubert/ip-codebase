@@ -99,7 +99,8 @@ class BundleCommand extends \Strata\Shell\Command\StrataCommand {
     {
         $this->output->writeln("Updating <info>Bower</info>...");
         $this->nl();
-        system("cd $themePath && bower install");
+        system("cd $themePath && bower install --allow-root");
+        $this->nl();
     }
 
     private function buildGrunt($themePath)
@@ -109,6 +110,7 @@ class BundleCommand extends \Strata\Shell\Command\StrataCommand {
 
         $command = WP_ENV === "development" ? "staging" : WP_ENV;
         system("cd $themePath && grunt " . $command);
+        $this->nl();
     }
     
     private function buildGulp($themePath)
@@ -118,5 +120,6 @@ class BundleCommand extends \Strata\Shell\Command\StrataCommand {
 
         $command = WP_ENV === "production" ? "--production" : "";
         system("cd $themePath && gulp " . $command);
+        $this->nl();
     }
 }
