@@ -56,10 +56,15 @@ trait SavableControllerTrait {
         ));
     }
 
+    protected function getSavableDefaultPostType()
+    {
+        return $this->request->get("post_type");
+    }
+
     protected function viewSavableEntriesList()
     {
         $querier = new SavableQuery();
-        $this->view->set("recentEntities", $querier->getPage(0, 20, $this->request->get("post_type")));
+        $this->view->set("recentEntities", $querier->getPage(0, 20, $this->getSavableDefaultPostType()));
 
         $templateFile = $this->getSavableListTemplatePath();
 
