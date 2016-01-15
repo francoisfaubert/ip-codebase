@@ -102,7 +102,7 @@ trait SavableControllerTrait {
         ));
     }
 
-    protected function getSavableEntity(WP_Post $post)
+    protected function getSavableEntity(WP_Post $post = null)
     {
         $name = $this->getRelatedEntityName();
 

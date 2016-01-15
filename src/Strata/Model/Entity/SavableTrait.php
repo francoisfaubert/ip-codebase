@@ -95,29 +95,91 @@ trait SavableTrait {
         return $this->savableDump->getQuestionsHash();
     }
 
-    public function save(array $data)
+    /**
+     * Looks for common patterns in $this->request->data() where
+     * the entity could find a posted user entity id.
+     * This is mainly for legacy purposes and the entity should supply the id
+     * using getSavableUserId() when possible.
+     * @param  array  $data [description]
+     * @return [type]       [description]
+     */
+    public function getSavableUserIdInData($data = array())
     {
-        $userId = null;
         if (array_key_exists("userentity", $data)) {
-            $userId = (int)$data["userentity"]["ID"];
+            return (int)$data["userentity"]["ID"];
         }
-        
+
+        return null;
+    }
+
+    /**
+     * Returns a user id on which the saved data will be associated.
+     * The entity is expect to override this function and return null
+     * when entity data does not require to be linked to a user.
+     * @return int
+     */
+    public function getSavableUserId()
+    {
+        return get_current_user_id();
+    }
+
+    /**
+     * Throws an exception when the userId has already
+     * participated and the configuration only requires single
+     * participations.
+     * @throws Exception
+     * @param  int $userId
+     */
+    private function throwIfSavebleUserIsUnique($userId)
+    {
         if ($this->savableConfiguration['unique_entries']) {
             if ($this->userIdHasParticipated($userId)) {
                 throw new Exception(__("User has already participated.", "ip"));
             }
         }
+    }
+
+    /**
+     * Saves an associative array supplied by Controller->request->data()
+     * containing a key matching the entities POST key.
+     * @param  array  $data  Controller->request->data()
+     * @return int id
+     */
+    public function save(array $data)
+    {
+        $userId = $this->getSavableUserIdInData($data);
+        $this->throwIfSavebleUserIsUnique($userId);
 
         // We expect this to come for a $this->request->data() call
         // and there could be garbage input in there.
         $ourData = $data[$this->getSavableEntityPostKey()];
-        $parsedData = array();
+        $attributeData = array();
 
         foreach ($this->getSavableAttributes() as $key => $attributeConfig) {
-            $parsedData[$key] = $ourData[$key];
+            $attributeData[$key] = $ourData[$key];
         }
 
-        return $this->getDump()->insert($userId, $parsedData);
+        return $this->getDump()->insert($userId, $attributeData);
+    }
+
+
+    /**
+     * Saves the current values of each of the attributes
+     * declared at the level of the savable entity.
+     * @return int id
+     */
+    public function saveEntity()
+    {
+        $userId = $this->getSavableUserId();
+        $this->throwIfSavebleUserIsUnique($userId);
+
+        $attributeData = array();
+
+        foreach ($this->getSavableAttributes() as $key => $attributeConfig) {
+            $attributeData[$key] = $this->{$key};
+        }
+
+        return $this->getDump()->insert($userId, $attributeData);
     }
 
     private function getDump()
