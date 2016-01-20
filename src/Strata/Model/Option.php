@@ -25,6 +25,11 @@ class Option extends \Strata\Model\Model {
     public static function save($optionKey, $values)
     {
         $normed = Hash::normalize($values);
-        return update_option($optionKey, json_encode($normed['optionentity']), false);
+
+        $data = array_key_exists('optionentity', $normed) ?
+            $normed['optionentity'] :
+            $normed;
+
+        return update_option($optionKey, json_encode($data), false);
     }
 }
