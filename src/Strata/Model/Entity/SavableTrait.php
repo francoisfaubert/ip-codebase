@@ -157,6 +157,10 @@ trait SavableTrait {
 
         foreach ($this->getSavableAttributes() as $key => $attributeConfig) {
             $attributeData[$key] = $ourData[$key];
+
+            if (is_array($attributeData[$key])) {
+                $attributeData[$key] = json_encode($attributeData[$key]);
+            }
         }
 
         return $this->getDump()->insert($userId, $attributeData);
@@ -177,6 +181,10 @@ trait SavableTrait {
 
         foreach ($this->getSavableAttributes() as $key => $attributeConfig) {
             $attributeData[$key] = $this->{$key};
+
+            if (is_array($attributeData[$key])) {
+                $attributeData[$key] = json_encode($attributeData[$key]);
+            }
         }
 
         return $this->getDump()->insert($userId, $attributeData);
@@ -240,4 +248,5 @@ trait SavableTrait {
     {
         return $answer->field_value;
     }
+
 }
