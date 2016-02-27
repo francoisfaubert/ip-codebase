@@ -2,7 +2,7 @@
 namespace IP\Code\Strata\Shell\Command;
 
 use Strata\Strata;
-use Strata\Shell\Command\StrataCommand;
+use Strata\Shell\Command\StrataCommandBase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
