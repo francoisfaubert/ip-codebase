@@ -6,7 +6,7 @@ use Strata\Shell\Command\StrataCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DevelopmentCommand extends StrataCommand
+class DevelopmentCommand extends StrataCommandBase
 {
     private $serverPid = 0;
 

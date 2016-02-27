@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * The bundle command will ensure the application is correctly configured
  * when the project is first setup.
  */
-class BundleCommand extends \Strata\Shell\Command\StrataCommand {
+class BundleCommand extends \Strata\Shell\Command\StrataCommandBase {
 
     /**
      * {@inheritdoc}
@@ -62,7 +62,7 @@ class BundleCommand extends \Strata\Shell\Command\StrataCommand {
         if ($this->hasGrunt($themePath)) {
             $this->buildGrunt($themePath);
         }
-        
+
         if ($this->hasGulp($themePath)) {
             $this->buildGulp($themePath);
         }
@@ -82,7 +82,7 @@ class BundleCommand extends \Strata\Shell\Command\StrataCommand {
     {
         return file_exists($themePath . "Gruntfile.js");
     }
-    
+
     private function hasGulp($themePath)
     {
         return file_exists($themePath . "gulpfile.js");
@@ -112,7 +112,7 @@ class BundleCommand extends \Strata\Shell\Command\StrataCommand {
         system("cd $themePath && grunt " . $command);
         $this->nl();
     }
-    
+
     private function buildGulp($themePath)
     {
         $this->output->writeln("Running <info>Gulp</info> for current environment (".WP_ENV.")...");

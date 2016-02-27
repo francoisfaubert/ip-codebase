@@ -4,13 +4,14 @@ namespace IP\Code\Strata\Implementation\Savable\Model;
 use IP\Code\Strata\Implementation\Savable\Model\Entity\SavableSubmissionEntity;
 use IP\Code\Strata\Implementation\Savable\Model\Entity\SavableAnswerEntity;
 
+use Exception;
+
 class SavableQuery {
 
     const DB_VERSION = "0.1.2";
 
     protected $logger;
     protected $inputHash;
-
 
     protected $associatedEntity;
 
