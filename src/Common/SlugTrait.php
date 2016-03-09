@@ -8,7 +8,7 @@ trait SlugTrait {
 
     public function toSlug($string)
     {
-        return strtolower(Inflector::slug($string));
+        return strtolower(Inflector::slug($string, "-"));
     }
 
 }
