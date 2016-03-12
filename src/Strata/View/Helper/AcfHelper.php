@@ -89,7 +89,7 @@ class AcfHelper extends \Strata\View\Helper\Helper {
 
         $validatedId = (!$id) ? "current global ID" : "#" . $id;
 
-        $this->log(sprintf("Loading data for %s. (Done in %s seconds)", $validatedId, round($completion, 4)));
+        $this->log(sprintf("Loading data for <info>%s</info>. (Done in %s seconds)", $validatedId, round($completion, 4)));
     }
 
     private function log($call)
@@ -103,6 +103,6 @@ class AcfHelper extends \Strata\View\Helper\Helper {
         }
 
         $partialFilePath = defined('ABSPATH') ? str_replace(dirname(dirname(ABSPATH)), "", $context) : $context;
-        Strata::config("IPLogger")->log($partialFilePath . ': ' . $call, "[IP:AcfHelper]");
+        Strata::config("loggers.IPLogger")->log($partialFilePath . ': ' . $call, "<yellow>IP:AcfHelper</yellow>");
     }
 }
