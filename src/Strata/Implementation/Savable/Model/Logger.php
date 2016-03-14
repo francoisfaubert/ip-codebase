@@ -18,6 +18,7 @@ class Logger {
         $executionTime = microtime(true) - $this->executionStart;
         $timer = sprintf(" (Done in %s seconds)", round($executionTime, 4));
         $oneLine = preg_replace('/\s+/', ' ', trim($sql));
-        Strata::app()->getLogger("loggers.IPLogger")->log($oneLine . $timer, "IP:Savable");
+
+        Strata::app()->getLogger("IPLogger")->log($oneLine . $timer, "<yellow>IP:Savable</yellow>");
     }
 }
