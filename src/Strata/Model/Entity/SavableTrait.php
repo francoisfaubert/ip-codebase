@@ -145,7 +145,7 @@ trait SavableTrait {
      * @param  array  $data  Controller->request->data()
      * @return int id
      */
-    public function save(array $data)
+    public function saveData(array $data)
     {
         $userId = $this->getSavableUserIdInData($data);
         $this->throwIfSavebleUserIsUnique($userId);
