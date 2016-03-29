@@ -2,6 +2,7 @@
 
 namespace IP\Code\Common;
 
+
 trait AcfCacheTrait {
 
     private $cache = array();
@@ -95,18 +96,9 @@ trait AcfCacheTrait {
         $this->log(sprintf("Loading data for <info>%s</info>. (Done in %s seconds)", $validatedId, round($completion, 4)));
     }
 
-    private function log($call)
+    protected function log($call)
     {
-        $context = "unknown context @ unknown line";
-        foreach (debug_backtrace() as $idx => $file) {
-            if ($file['file'] != __FILE__) {
-                $context = sprintf("%s @ %s", $file['file'], $file['line']);
-                break;
-            }
-        }
 
-        $partialFilePath = defined('ABSPATH') ? str_replace(dirname(dirname(ABSPATH)), "", $context) : $context;
-        Strata::app()->getLogger("IPLogger")->log($partialFilePath . ': ' . $call, "<yellow>IP:AcfHelper</yellow>");
     }
 
 }
