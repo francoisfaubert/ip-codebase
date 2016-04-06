@@ -43,11 +43,8 @@ class I18nHelper extends \Strata\View\Helper\Helper {
 
         if ($translatedPost) {
             if ((bool)Strata::app()->getConfig("i18n.default_locale_fallback")) {
-                $replace = WP_HOME . "/" . $currentLocale->getUrl() . "/";
-                $replacement = $locale->isDefault() ?
-                    WP_HOME . "/" :
-                    WP_HOME . "/" . $locale->getUrl() . "/";
-
+                $replace = $currentLocale->getHomeUrl();
+                $replacement = $locale->getHomeUrl();
                 return str_replace($replace, $replacement, get_permalink($translatedPost->ID));
             }
 
@@ -55,24 +52,11 @@ class I18nHelper extends \Strata\View\Helper\Helper {
         }
 
         if ((bool)Strata::app()->getConfig("i18n.default_locale_fallback")) {
-
             $originalPost = $this->getDefaultLocale()->getTranslatedPost(get_the_ID());
             if ($originalPost) {
-
                 $originalUrl = get_permalink($originalPost);
-
-                if ($currentLocale->isDefault()) {
-                    $replace = WP_HOME . "/";
-                } else {
-                    $replace = WP_HOME . "/" . $currentLocale->getUrl() . "/";
-                }
-
-                if ($locale->isDefault()) {
-                    $replacement = WP_HOME . "/";
-                } else {
-                    $replacement = WP_HOME . "/" . $locale->getUrl() . "/";
-                }
-
+                $replace = $currentLocale->getHomeUrl();
+                $replacement = $locale->getHomeUrl();
                 return str_replace($replace, $replacement, $originalUrl);
             }
         }
@@ -92,7 +76,6 @@ class I18nHelper extends \Strata\View\Helper\Helper {
 
         return $pageId;
     }
-
 
     public function getOriginalId($pageId)
     {
