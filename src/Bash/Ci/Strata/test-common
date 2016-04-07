@@ -1,38 +1,21 @@
 #!/usr/bin/env bash
 
+
 BIN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT_DIR="$( dirname "$BIN_DIR")"
 
-# Create a test database config file
-if [[ ! -f "$ROOT_DIR/.env" ]] ; then
-    echo "[strata-test-common] [ OK ] Found default database information. Copying it to project."
-    cp "$ROOT_DIR/.env_empty" "$ROOT_DIR/.env"
-    perl -pi -e "s/DB_NAME=/DB_NAME=test_bamboo/g" "$ROOT_DIR/.env"
-    perl -pi -e "s/DB_USER=/DB_USER=root/g" "$ROOT_DIR/.env"
-    perl -pi -e "s/DB_PASSWORD=/DB_PASSWORD=root/g" "$ROOT_DIR/.env"
-    perl -pi -e "s/WP_HOME=/WP_HOME=http:\/\/127\.0\.0\.1:5454/g" "$ROOT_DIR/.env"
-    perl -pi -e "s/WP_SITEURL=/WP_SITEURL=http:\/\/127\.0\.0\.1:5454\/wp\//g" "$ROOT_DIR/.env"
-else
-    echo "[strata-test-common] [SKIP] Did not find default database information. It may not break the build."
-fi;
-
-
-# Build the website
-if [[ ! -f $BIN_DIR/build ]] ; then
-    echo "[strata-test-common] [FAIL] Cannot find the build script."
+if [[ ! -f $ROOT_DIR/vendor/iprospect_ca/ip-codebase/src/Bash/Ci/Strata/build-common ]] ; then
+    echo "[build] [FAIL] Default build script could not be found.\n"
     exit 500
 else
-    echo "[strata-test-common] [ OK ] Found build script. Invoking command...\n"
+    echo "[build] [ OK ] Found common build script. Invoking command..\n"
 fi
 
-$BIN_DIR/build
+$ROOT_DIR/vendor/iprospect_ca/ip-codebase/src/Bash/Ci/Strata/build-common
+
 
 # Run backend tests
-
-if [[ ! -f $ROOT_DIR/strata ]] ; then
-    echo "[strata-test-common] [FAIL] Cannot find Strata."
-    exit 500
-fi
+# -----------------
 
 if $ROOT_DIR/strata test; then
     echo "[strata-test-common] [ OK ] Backend tests succeeded."
@@ -42,7 +25,8 @@ else
 fi
 
 # Run frontend tests
-echo "[strata-test-common] [SKIP] Skipping forntend tests."
+# ------------------
 
+echo "[strata-test-common] [SKIP] Skipping forntend tests."
 
 echo "[strata-test-common] Completed successfully."

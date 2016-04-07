@@ -3,22 +3,6 @@
 BIN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT_DIR="$( dirname "$BIN_DIR")"
 
-if [[ ! -f /usr/local/bin/composer ]] ; then
-    echo "[strata-build-common] [FAIL] Composer is required to build this project.\n"
-    exit 500
-else
-    echo "[strata-build-common] [ OK ] Found Composer on the server.\n"
-fi
-
-# Update composer
-echo "[strata-build-common] Clearing Composer's cache...\n"
-/usr/local/bin/composer clearcache
-echo "[strata-build-common] Done\n"
-
-echo "[strata-build-common] Updating Composer...\n"
-/usr/local/bin/composer update
-echo "[strata-build-common] Done\n"
-
 
 # Confirm we have all the core dependencies before continuing.
 if [[ ! -f $ROOT_DIR/strata ]] ; then
@@ -27,7 +11,6 @@ if [[ ! -f $ROOT_DIR/strata ]] ; then
 else
     echo "[strata-build-common] [ OK ] Strata was installed successfuly"
 fi
-
 
 # Create a test database
 if [[ -f "$ROOT_DIR/.env" ]] ; then
