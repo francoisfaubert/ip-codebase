@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
+if [[ -d ${bamboo_build_working_directory} ]]; then
+    echo "[strata-build-common] Missing bamboo_build_working_directory variable. Cannot continue."
+    exit 500
+fi
 
-BIN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-ROOT_DIR="$( dirname "$BIN_DIR")"
+ROOT_DIR="$bamboo_build_working_directory"
 
 if [[ ! -f $ROOT_DIR/vendor/iprospect_ca/ip-codebase/src/Bash/Ci/Strata/build-common ]] ; then
     echo "[strata-test-common] [FAIL] Default build script could not be found."

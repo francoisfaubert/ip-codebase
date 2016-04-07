@@ -12,6 +12,7 @@ IPROOT_DIR="$( dirname "$RELEASE_DIR")"
 PROJECT_NAME=$@
 PROJECT_DIR="$IPROOT_DIR/$PROJECT_NAME"
 
+
 echo ""
 echo "[strata-deploy-common] [ OK ] Running with the following configurations: "
 echo ""

@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 
-BIN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-ROOT_DIR="$( dirname "$BIN_DIR")"
 
+if [[ -d ${bamboo_build_working_directory} ]]; then
+    echo "[strata-build-common] Missing bamboo_build_working_directory variable. Cannot continue."
+    exit 500
+fi
+
+ROOT_DIR="$bamboo_build_working_directory"
 
 # Confirm we have all the core dependencies before continuing.
 if [[ ! -f $ROOT_DIR/strata ]] ; then
-    echo "[strata-build-common] [FAIL] Strata dependency was not installed. Cannot continue.\n"
+    echo "[strata-build-common] [FAIL] Strata dependency was not installed. Cannot continue."
+    echo $ROOT_DIR/strata
     exit 500
 else
-    echo "[strata-build-common] [ OK ] Strata was installed successfuly"
+    echo "[strata-build-common] [ OK ] Strata was installed successfuly."
 fi
 
 # Create a test database
