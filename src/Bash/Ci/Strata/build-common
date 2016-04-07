@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 
+ROOT_DIR=$@
 
-if [[ -d ${bamboo_build_working_directory} ]]; then
-    echo "[strata-build-common] Missing bamboo_build_working_directory variable. Cannot continue."
+if [[ -d ${ROOT_DIR} ]]; then
+    echo "[strata-build-common] Missing ROOT_DIR variable. Cannot continue."
     exit 500
 fi
-
-ROOT_DIR="$bamboo_build_working_directory"
 
 # Confirm we have all the core dependencies before continuing.
 if [[ ! -f $ROOT_DIR/strata ]] ; then

@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-if [[ -d ${bamboo_build_working_directory} ]]; then
-    echo "[strata-package-common] Missing bamboo_build_working_directory variable. Cannot continue."
+ROOT_DIR=$@
+
+if [[ -d ${ROOT_DIR} ]]; then
+    echo "[strata-package-common] Missing ROOT_DIR variable. Cannot continue."
     exit 500
 fi
 
