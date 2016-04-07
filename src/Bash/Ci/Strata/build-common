@@ -17,6 +17,19 @@ else
     echo "[strata-build-common] [ OK ] Strata was installed successfuly."
 fi
 
+# Create a placeholder server configurations.
+if [[ ! -f "$ROOT_DIR/.env" ]] ; then
+    if [[ -f "$ROOT_DIR/.env_empty" ]] ; then
+        cp "$ROOT_DIR/.env_empty" "$ROOT_DIR/.env"
+        perl -pi -e "s/DB_NAME=/DB_NAME=test_bamboo/g" "$ROOT_DIR/.env"
+        perl -pi -e "s/DB_USER=/DB_USER=root/g" "$ROOT_DIR/.env"
+        perl -pi -e "s/DB_PASSWORD=/DB_PASSWORD=root/g" "$ROOT_DIR/.env"
+        perl -pi -e "s/WP_HOME=/WP_HOME=http:\/\/127\.0\.0\.1:5454/g" "$ROOT_DIR/.env"
+        perl -pi -e "s/WP_SITEURL=/WP_SITEURL=http:\/\/127\.0\.0\.1:5454\/wp\//g" "$ROOT_DIR/.env"
+    fi
+fi;
+
+
 # Create a test database
 if [[ -f "$ROOT_DIR/.env" ]] ; then
     echo "[strata-build-common] [ OK ] Found database information. Creating Database..."
