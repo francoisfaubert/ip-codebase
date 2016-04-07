@@ -2,6 +2,7 @@
 
 if [[ ! -f /usr/local/bin/composer ]] ; then
     echo "[strata-build-common] [FAIL] Composer is required to build this project.\n"
+    echo "$ROOT_DIR"
     exit 500
 else
     echo "[strata-build-common] [ OK ] Found Composer on the server.\n"
