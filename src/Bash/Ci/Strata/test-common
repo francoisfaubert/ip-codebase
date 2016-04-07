@@ -11,7 +11,7 @@ else
     echo "[build] [ OK ] Found common build script. Invoking command..\n"
 fi
 
-$ROOT_DIR/vendor/iprospect_ca/ip-codebase/src/Bash/Ci/Strata/build-common
+sh $ROOT_DIR/vendor/iprospect_ca/ip-codebase/src/Bash/Ci/Strata/build-common
 
 
 # Run backend tests
