@@ -2,7 +2,7 @@
 
 ROOT_DIR=$@
 
-if [[ -d ${ROOT_DIR} ]]; then
+if [[ ! -d ${ROOT_DIR} ]]; then
     echo "[strata-package-common] Missing ROOT_DIR variable. Cannot continue."
     echo "$ROOT_DIR"
     exit 500
