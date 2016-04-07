@@ -15,3 +15,5 @@ echo "[strata-build-common] Done\n"
 echo "[strata-build-common] Updating Composer...\n"
 /usr/local/bin/composer update
 echo "[strata-build-common] Done\n"
+
+exit 0

@@ -93,3 +93,4 @@ mv -v $RELEASE_DIR $PROJECT_DIR
 echo "[strata-deploy-common] Done."
 
 echo "[strata-deploy-common] Completed successfully."
+exit 0

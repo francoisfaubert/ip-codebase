@@ -5,13 +5,18 @@ BIN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT_DIR="$( dirname "$BIN_DIR")"
 
 if [[ ! -f $ROOT_DIR/vendor/iprospect_ca/ip-codebase/src/Bash/Ci/Strata/build-common ]] ; then
-    echo "[build] [FAIL] Default build script could not be found.\n"
+    echo "[strata-test-common] [FAIL] Default build script could not be found."
     exit 500
 else
-    echo "[build] [ OK ] Found common build script. Invoking command..\n"
+    echo "[strata-test-common] [ OK ] Found common build script. Invoking command.."
 fi
 
-sh $ROOT_DIR/vendor/iprospect_ca/ip-codebase/src/Bash/Ci/Strata/build-common
+if sh $ROOT_DIR/vendor/iprospect_ca/ip-codebase/src/Bash/Ci/Strata/build-common; then
+    echo "[strata-test-common] [FAIL] Common build passed."
+else
+    echo "[strata-test-common] [FAIL] Common build failed."
+    exit 500
+fi
 
 
 # Run backend tests
@@ -30,3 +35,5 @@ fi
 echo "[strata-test-common] [SKIP] Skipping forntend tests."
 
 echo "[strata-test-common] Completed successfully."
+
+exit 0

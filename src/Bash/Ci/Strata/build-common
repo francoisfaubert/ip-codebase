@@ -29,3 +29,5 @@ $ROOT_DIR/strata bundle
 echo "[strata-build-common] Done\n"
 
 echo "[strata-build-common] Completed successfully."
+
+exit 0

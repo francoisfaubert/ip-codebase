@@ -5,7 +5,6 @@ if [[ -d ${bamboo_build_working_directory} ]]; then
     exit 500
 fi
 
-
 echo "[strata-package-common] Removing files from build that are not required..."
 
 # Vendor error:
@@ -30,3 +29,5 @@ echo "[strata-package-common] Done"
 
 
 echo "[strata-package-common] Completed successfully."
+
+exit 0
