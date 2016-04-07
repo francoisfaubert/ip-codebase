@@ -36,15 +36,15 @@ if [[ -f "$ROOT_DIR/.env" ]] ; then
     export PATH="$PATH:/usr/bin"
     $ROOT_DIR/strata db create
 else
-    echo "[strata-build-common] [FAIL] Missing required environment file. Cannot create database and install Wordpress' default tables.\n"
+    echo "[strata-build-common] [FAIL] Missing required environment file. Cannot create database and install Wordpress' default tables."
     exit 500
 fi
 
 # Create frontend bundle package
-echo "[strata-build-common] Running frontend bundle...\n"
+echo "[strata-build-common] Running frontend bundle..."
 export PATH="$PATH:/opt/node-0.12/bin/"
 $ROOT_DIR/strata bundle
-echo "[strata-build-common] Done\n"
+echo "[strata-build-common] Done"
 
 echo "[strata-build-common] Completed successfully."
 

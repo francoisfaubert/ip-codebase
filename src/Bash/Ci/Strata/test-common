@@ -3,22 +3,8 @@
 ROOT_DIR=$@
 
 if [[ ! -d ${ROOT_DIR} ]]; then
-    echo "[strata-package-common] Missing ROOT_DIR variable. Cannot continue."
+    echo "[strata-test-common] Missing ROOT_DIR variable. Cannot continue."
     echo "$ROOT_DIR"
-    exit 500
-fi
-
-if [[ ! -f $ROOT_DIR/vendor/iprospect_ca/ip-codebase/src/Bash/Ci/Strata/build-common ]] ; then
-    echo "[strata-test-common] [FAIL] Default build script could not be found."
-    exit 500
-else
-    echo "[strata-test-common] [ OK ] Found common build script. Invoking command.."
-fi
-
-if sh $ROOT_DIR/vendor/iprospect_ca/ip-codebase/src/Bash/Ci/Strata/build-common; then
-    echo "[strata-test-common] [FAIL] Common build passed."
-else
-    echo "[strata-test-common] [FAIL] Common build failed."
     exit 500
 fi
 
