@@ -6,11 +6,12 @@ if [ $# -eq 0 ]; then
     exit 500
 fi
 
+n=1
+PROJECT_NAME=${!n}
+n=2
+RELEASE_DIR=${!n}
 
-RELEASE_BIN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-RELEASE_DIR="$( dirname "$RELEASE_BIN_DIR")"
 IPROOT_DIR="$( dirname "$RELEASE_DIR")"
-PROJECT_NAME=$@
 PROJECT_DIR="$IPROOT_DIR/$PROJECT_NAME"
 
 
