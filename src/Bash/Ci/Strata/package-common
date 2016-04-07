@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+if [[ -d ${bamboo_build_working_directory} ]]; then
+    echo "[strata-package-common] Missing bamboo_build_working_directory variable. Cannot continue."
+    exit 500
+fi
+
+
+echo "[strata-package-common] Removing files from build that are not required..."
+
+# Vendor error:
+# This repo generates wierd symlink issues that raise
+# errors in Bamboo's JVM
+rm -rf ${bamboo_build_working_directory}/vendor/theseer/directoryscanner/tests/_data
+
+# Don't need git
+rm -rf ${bamboo_build_working_directory}/.git
+
+# Don't keep the .env
+rm ${bamboo_build_working_directory}/.env
+
+echo "[strata-package-common] Done"
+
+
+echo "[strata-package-common] Compressing build into release.tar.gz tarball."
+cd ..
+tar -czvf release.tar.gz -C ${bamboo_build_working_directory} .
+mv release.tar.gz ${bamboo_build_working_directory}
+echo "[strata-package-common] Done"
+
+
+echo "[strata-package-common] Completed successfully."

@@ -1,0 +1,95 @@
+
+#!/usr/bin/env bash
+
+if [ $# -eq 0 ]; then
+    echo "[strata-deploy-common] [FAIL] No project name supplied. Script does not know where to install project.\n"
+    exit 500
+fi
+
+RELEASE_BIN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+RELEASE_DIR="$( dirname "$RELEASE_BIN_DIR")"
+IPROOT_DIR="$( dirname "$RELEASE_DIR")"
+PROJECT_NAME=$@
+PROJECT_DIR="$IPROOT_DIR/$PROJECT_NAME"
+
+echo ""
+echo "[strata-deploy-common] [ OK ] Running with the following configurations: "
+echo ""
+echo "    IP root: $IPROOT_DIR"
+echo "    Release:  $RELEASE_DIR"
+echo "    Project Name: ${PROJECT_NAME}"
+echo "    Project dir: ${PROJECT_DIR}"
+echo ""
+
+# Keep the files that may have been modified on the server
+if [[ -f "$PROJECT_DIR/.env" ]]; then
+    echo "[strata-deploy-common] Keeping the environment configuration..."
+    cp -v $PROJECT_DIR/.env $RELEASE_DIR
+    echo "[strata-deploy-common] Done."
+else
+    echo "[strata-deploy-common] [SKIP] No previous .env file found."
+fi;
+
+if [[ -d "$PROJECT_DIR/tmp" ]]; then
+    echo "[strata-deploy-common] Keeping tmp files..."
+    cp -vR $PROJECT_DIR/tmp/* $RELEASE_DIR/tmp/
+    echo "[strata-deploy-common] Done."
+else
+    echo "[strata-deploy-common] [SKIP] No previous tmp directory found."
+fi;
+
+if [[ -d "$PROJECT_DIR/config/locale/" ]]; then
+    echo "[strata-deploy-common] Keeping locale files...."
+    cp -vR $PROJECT_DIR/config/locale/* $RELEASE_DIR/config/locale/
+    echo "[strata-deploy-common] Done."
+
+    # Project's (the code from bitbucket) should not contain a -development
+    # file. It should have been gitignore'd.
+    if [[ -f "$PROJECT_DIR/config/locale/fr_CA-development.po" ]]; then
+        if [[ -f "$RELEASE_DIR/config/locale/fr_CA-development.po" ]]; then
+            echo ""
+            echo "[strata-deploy-common] [WARN] Removing uploaded locale file. Please do not add this file to git."
+            echo ""
+            rm $RELEASE_DIR/config/locale/fr_CA-development.po
+        fi;
+    fi;
+else
+    echo "[strata-deploy-common] [SKIP] No previous config/locale directory found."
+fi;
+
+if [[ -d "$PROJECT_DIR/web/app/uploads/" ]]; then
+    echo "Keeping uploaded files."
+    cp -Rv $PROJECT_DIR/web/app/uploads/* $RELEASE_DIR/web/app/uploads/
+    echo "[strata-deploy-common] Done."
+else
+    echo "[strata-deploy-common] [SKIP] No previous tmp directory found."
+fi;
+
+echo "[strata-deploy-common] Restoring file permissions..."
+chown -c iprospect:iprospect ${RELEASE_DIR}
+chown -cR iprospect:iprospect ${RELEASE_DIR}
+echo "[strata-deploy-common] Done."
+
+echo "[strata-deploy-common] Restoring file rights..."
+find ${RELEASE_DIR} -type f -exec chmod 644 '{}' ';'
+find ${RELEASE_DIR} -type d -exec chmod 755 '{}' ';'
+echo "[strata-deploy-common] Done."
+
+echo "[strata-deploy-common] [ OK ] Everything looks in order, swapping folders."
+
+if [[ -d "$PROJECT_DIR-backup/" ]]; then
+    echo "[strata-deploy-common] Removing previous backup..."
+    rm -rfv $PROJECT_DIR-backup/
+    echo "[strata-deploy-common] Done."
+fi;
+
+echo "[strata-deploy-common] Keeping a backup version of the current version."
+echo "mv $PROJECT_DIR $PROJECT_DIR-backup/"
+mv -v $PROJECT_DIR $PROJECT_DIR-backup/
+echo "[strata-deploy-common] Done."
+
+echo "[strata-deploy-common] Moving the release to the web facing directory"
+mv -v $RELEASE_DIR $PROJECT_DIR
+echo "[strata-deploy-common] Done."
+
+echo "[strata-deploy-common] Completed successfully."
