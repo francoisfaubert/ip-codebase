@@ -19,6 +19,6 @@ class AcfHelper extends StrataHelper {
         }
 
         $partialFilePath = defined('ABSPATH') ? str_replace(dirname(dirname(ABSPATH)), "", $context) : $context;
-        Strata::app()->getLogger("IPLogger")->log($partialFilePath . ': ' . $call, "<yellow>IP:AcfHelper</yellow>");
+        Strata::app()->log($partialFilePath . ': ' . $call, "<yellow>IP:AcfHelper</yellow>");
     }
 }
