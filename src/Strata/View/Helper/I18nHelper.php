@@ -9,26 +9,26 @@ class I18nHelper extends \Strata\View\Helper\Helper {
 
     use SlugTrait;
 
-    protected $polyglot;
+    protected $i18n;
 
     function __construct()
     {
-        $this->polyglot = Polyglot::instance();
+        $this->i18n = Strata::i18n();
     }
 
     public function getLocales()
     {
-        return $this->polyglot->getLocales();
+        return $this->i18n->getLocales();
     }
 
     public function getCurrentLocale()
     {
-        return $this->polyglot->getCurrentLocale();
+        return $this->i18n->getCurrentLocale();
     }
 
     public function getDefaultLocale()
     {
-        return $this->polyglot->getDefaultLocale();
+        return $this->i18n->getDefaultLocale();
     }
 
     public function isCurrentLocale($locale)
@@ -42,7 +42,7 @@ class I18nHelper extends \Strata\View\Helper\Helper {
         $translatedPost = $locale->getTranslatedPost();
 
         if ($translatedPost) {
-            if ((bool)Strata::app()->getConfig("i18n.default_locale_fallback")) {
+            if ((bool)Strata::config("i18n.default_locale_fallback")) {
                 $replace = $currentLocale->getHomeUrl();
                 $replacement = $locale->getHomeUrl();
                 return str_replace($replace, $replacement, get_permalink($translatedPost->ID));
@@ -51,7 +51,7 @@ class I18nHelper extends \Strata\View\Helper\Helper {
             return get_permalink($translatedPost->ID);
         }
 
-        if ((bool)Strata::app()->getConfig("i18n.default_locale_fallback")) {
+        if ((bool)Strata::config("i18n.default_locale_fallback")) {
             $originalPost = $this->getDefaultLocale()->getTranslatedPost(get_the_ID());
             if ($originalPost) {
                 $originalUrl = get_permalink($originalPost);
@@ -94,7 +94,7 @@ class I18nHelper extends \Strata\View\Helper\Helper {
     {
         $currentId = (int)get_the_ID();
         $locale = $this->getCurrentLocale();
-        $homepageId = $this->polyglot->query()->getDefaultHomepageId();
+        $homepageId = $this->i18n->query()->getDefaultHomepageId();
 
         if ($locale->isDefault()) {
             return $currentId === $homepageId;
