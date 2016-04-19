@@ -21,6 +21,11 @@ rm -rf ${bamboo_build_working_directory}/.git
 # Don't keep the .env
 rm ${bamboo_build_working_directory}/.env
 
+# Don't keep the NPM packages
+if [[ -d ${bamboo_build_working_directory}/web/app/themes/sage-master/node_modules ]]; then
+    rm -rf ${bamboo_build_working_directory}/web/app/themes/sage-master/node_modules
+fi
+
 echo "[strata-package-common] Done"
 
 
