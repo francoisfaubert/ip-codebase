@@ -14,7 +14,13 @@ echo "[strata-build-common] Clearing Composer's cache...\n"
 echo "[strata-build-common] Done\n"
 
 echo "[strata-build-common] Updating Composer...\n"
-/usr/local/bin/composer update
+stdbuf -oL /usr/local/bin/composer update |
+  while read -r line;  do
+    if [[ $line == *Update\ failed* ]]; then
+        exit 500
+    fi
+    sleep 1
+  done
 echo "[strata-build-common] Done\n"
 
 exit 0
