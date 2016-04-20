@@ -56,6 +56,11 @@ if [[ -d "$PROJECT_DIR/config/locale/" ]]; then
             rm $RELEASE_DIR/config/locale/fr_CA-development.po
         fi;
     fi;
+
+    echo "[strata-deploy-common] Applying local strings back in the project...."
+    sh strata i18n scan
+    echo "[strata-deploy-common] Done."
+
 else
     echo "[strata-deploy-common] [SKIP] No previous config/locale directory found."
 fi;
