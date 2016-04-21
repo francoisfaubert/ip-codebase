@@ -35,7 +35,7 @@ fi;
 
 if [[ -d "$PROJECT_DIR/tmp" ]]; then
     echo "[strata-deploy-common] Keeping tmp files..."
-    cp -vR $PROJECT_DIR/tmp/* $RELEASE_DIR/tmp/
+    cp -vnR $PROJECT_DIR/tmp/* $RELEASE_DIR/tmp/
     echo "[strata-deploy-common] Done."
 else
     echo "[strata-deploy-common] [SKIP] No previous tmp directory found."
@@ -43,7 +43,7 @@ fi;
 
 if [[ -d "$PROJECT_DIR/config/locale/" ]]; then
     echo "[strata-deploy-common] Keeping locale files...."
-    cp -vR $PROJECT_DIR/config/locale/* $RELEASE_DIR/config/locale/
+    cp -vnR $PROJECT_DIR/config/locale/* $RELEASE_DIR/config/locale/
     echo "[strata-deploy-common] Done."
 
     # Project's (the code from bitbucket) should not contain a -development
@@ -67,7 +67,7 @@ fi;
 
 if [[ -d "$PROJECT_DIR/web/app/uploads/" ]]; then
     echo "Keeping uploaded files."
-    cp -Rv $PROJECT_DIR/web/app/uploads/* $RELEASE_DIR/web/app/uploads/
+    cp -Rnv $PROJECT_DIR/web/app/uploads/* $RELEASE_DIR/web/app/uploads/
     echo "[strata-deploy-common] Done."
 else
     echo "[strata-deploy-common] [SKIP] No previous tmp directory found."
