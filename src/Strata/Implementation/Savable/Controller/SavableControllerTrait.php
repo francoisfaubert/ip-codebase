@@ -14,7 +14,17 @@ trait SavableControllerTrait {
 
     public function viewSavableEntries()
     {
-        $this->view->set("editUrlBase", "edit.php?post_type=".$this->request->get('post_type')."&page=".$this->request->get('page'));
+        $postTypeGetParam = "";
+        if ($this->request->hasGet('post_type')) {
+            $postTypeGetParam = "post_type=" . $this->request->get('post_type') . "&";
+        }
+
+        $pageGetParam = "";
+        if ($this->request->hasGet('page')) {
+            $pageGetParam = "page=" . $this->request->get('page');
+        }
+
+        $this->view->set("editUrlBase", "edit.php?" . $postTypeGetParam . $pageGetParam);
 
         if ($this->request->hasGet("viewEntry")) {
             $this->viewSavableResultDetails();

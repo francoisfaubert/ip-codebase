@@ -26,7 +26,11 @@
             <tr class="<?php echo (($idx%2) === 0) ? 'even' : 'odd'; ?>">
                 <td>
                     <a href="<?php echo $editUrlBase . "&postID=" . $row->post_ID; ?>">
-                        <?php echo get_the_title($row->post_ID); ?>
+                        <?php if (get_post_type($row->post_ID) === $row->post_type) : ?>
+                            <?php echo get_the_title($row->post_ID); ?>
+                        <?php else : ?>
+                            <?php echo $entityLabel; ?>
+                        <?php endif; ?>
                     </a>
                 </td>
                 <td>

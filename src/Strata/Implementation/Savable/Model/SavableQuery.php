@@ -4,6 +4,7 @@ namespace IP\Code\Strata\Implementation\Savable\Model;
 use IP\Code\Strata\Implementation\Savable\Model\Entity\SavableSubmissionEntity;
 use IP\Code\Strata\Implementation\Savable\Model\Entity\SavableAnswerEntity;
 
+use Strata\Strata;
 use Exception;
 
 class SavableQuery {
@@ -70,7 +71,7 @@ class SavableQuery {
         dbDelta($sql);
 
         update_option('ip_savable_db_version', self::DB_VERSION);
-        $this->logger->log("Created or updated the Savable table.");
+        Strata::app()->log("Created or updated the Savable table.", "<yellow>IP:Savable</yellow>");
     }
 
     public function getCount()
