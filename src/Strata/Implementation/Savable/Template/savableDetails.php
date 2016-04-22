@@ -2,7 +2,10 @@
 
     <h1><?php echo $entityLabel; ?></h1>
 
-    <h3><a href="<?php echo admin_url('post.php?post='.$datasourceEntity->ID.'&action=edit'); ?>"><?php echo $datasourceEntity->post_title; ?></a></h3>
+    <?php if (get_post_type($datasourceEntity->ID) === $datasourceEntity->post_type) : ?>
+        <h3><a href="<?php echo admin_url('post.php?post='.$datasourceEntity->ID.'&action=edit'); ?>"><?php echo $datasourceEntity->post_title; ?></a></h3>
+    <?php endif; ?>
+
 
     <?php
         $attributes = $entity->getSavableDisplayedAttributesDetailedView();
