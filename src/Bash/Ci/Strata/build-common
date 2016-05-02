@@ -11,7 +11,6 @@ fi
 # Confirm we have all the core dependencies before continuing.
 if [[ ! -f $ROOT_DIR/strata ]] ; then
     echo "[strata-build-common] [FAIL] Strata dependency was not installed. Cannot continue."
-    echo $ROOT_DIR/strata
     exit 500
 else
     echo "[strata-build-common] [ OK ] Strata was installed successfuly."
@@ -43,7 +42,14 @@ fi
 # Create frontend bundle package
 echo "[strata-build-common] Running frontend bundle..."
 export PATH="$PATH:/opt/node-0.12/bin/"
-$ROOT_DIR/strata bundle
+
+stdbuf -oL $ROOT_DIR/strata bundle |
+  while read -r line;  do
+    if [[ $line == *Error:\ * ]]; then
+        exit 500
+    fi
+    sleep 1
+  done
 echo "[strata-build-common] Done"
 
 echo "[strata-build-common] Completed successfully."
