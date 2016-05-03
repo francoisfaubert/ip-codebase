@@ -40,7 +40,6 @@ class DevelopmentCommand extends StrataCommandBase
 
     private function executeGruntTask()
     {
-
         $this->startDetachedPHPServer();
         $this->startGruntWatch();
     }
@@ -48,7 +47,6 @@ class DevelopmentCommand extends StrataCommandBase
     private function startDetachedPHPServer()
     {
         $this->output->writeln('A webserver is now available at <info>http://127.0.0.1:5454/</info>');
-        $this->nl();
 
         $command = 'WP_ENV=development php -S 0.0.0.0:5454 ';
 
@@ -59,12 +57,11 @@ class DevelopmentCommand extends StrataCommandBase
 
         $command .= '-t web/ > /dev/null & printf "%u" $!';
 
-        $this->serverPid = shell_exec($command);
-
-        $this->output->writeln('PID #' . $this->serverPid);
         $this->output->writeln('Press <info>CTRL + C</info> to exit');
         $this->nl();
         $this->nl();
+
+        $this->serverPid = shell_exec($command);
     }
 
     private function startGulpWatch()
