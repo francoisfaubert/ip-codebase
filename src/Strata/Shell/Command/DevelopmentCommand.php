@@ -40,10 +40,6 @@ class DevelopmentCommand extends StrataCommandBase
 
     private function executeGruntTask()
     {
-        $this->output->writeln('A webserver is now available at <info>http://127.0.0.1:5454/</info>');
-        $this->output->writeln('Press <info>CTRL + C</info> to exit');
-        $this->nl();
-        $this->nl();
 
         $this->startDetachedPHPServer();
         $this->startGruntWatch();
@@ -51,18 +47,21 @@ class DevelopmentCommand extends StrataCommandBase
 
     private function startDetachedPHPServer()
     {
+        $this->output->writeln('A webserver is now available at <info>http://127.0.0.1:5454/</info>');
+        $this->nl();
+
         $command = 'WP_ENV=development php -S 0.0.0.0:5454 ';
 
         if ($this->hasIniFile()) {
-            $command .= " -c php.ini";
+            $output->writeln('Using found <info>php.ini</info> file.');
+            $command .= " -c php.ini ";
         }
 
         $command .= '-t web/ > /dev/null & printf "%u" $!';
 
         $this->serverPid = shell_exec($command);
 
-        $this->output->writeln('Launching development server (#' . $this->serverPid . ')');
-        $this->output->writeln($command);
+        $this->output->writeln('PID #' . $this->serverPid);
         $this->output->writeln('Press <info>CTRL + C</info> to exit');
         $this->nl();
         $this->nl();
