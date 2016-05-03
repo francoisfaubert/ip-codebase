@@ -19,6 +19,12 @@ stdbuf -oL /usr/local/bin/composer update |
     if [[ $line == *Update\ failed* ]]; then
         exit 500
     fi
+
+    if [[ $line == *fatal:\ Authentication\ failed* ]]; then
+        echo "Please reboot the Bamboo virtual machine"
+        exit 500
+    fi
+
     sleep 1
   done
 echo "[strata-build-common] Done\n"
