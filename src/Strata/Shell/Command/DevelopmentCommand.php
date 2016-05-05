@@ -51,7 +51,7 @@ class DevelopmentCommand extends StrataCommandBase
         $command = 'WP_ENV=development php -S 0.0.0.0:5454 ';
 
         if ($this->hasIniFile()) {
-            $output->writeln('Using found <info>php.ini</info> file.');
+            $this->output->writeln('Using found <info>php.ini</info> file.');
             $command .= " -c php.ini ";
         }
 
