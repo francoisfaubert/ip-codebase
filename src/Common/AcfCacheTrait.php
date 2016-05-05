@@ -31,11 +31,13 @@ trait AcfCacheTrait {
 
     public function check($field, $id = null)
     {
+        $id = $this->proofCurrentId($id);
+
         if (!$this->hasCached($id)) {
             $this->getFields($id);
         }
 
-        return $this->isCachedValue($field, $this->proofCurrentId($id));
+        return $this->isCachedValue($field, $id);
     }
 
     public function hasCached($id = null)
@@ -74,7 +76,8 @@ trait AcfCacheTrait {
             if (is_null($this->defaultId)) {
                 $this->defaultId = get_the_ID();
             }
-            return $this->defaultId;
+
+            return (int)$this->defaultId;
         }
 
         return (int)$id;
@@ -82,7 +85,8 @@ trait AcfCacheTrait {
 
     private function isCachedValue($field, $id)
     {
-        return $this->hasCached($id) && array_key_exists($field, $this->cache[$this->getCacheKey($id)]);
+        $key = $this->getCacheKey($id);
+        return $this->hasCached($id) && array_key_exists($field, $this->cache[$key]);
     }
 
     private function getFields($id)
