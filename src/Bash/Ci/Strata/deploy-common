@@ -58,7 +58,7 @@ if [[ -d "$PROJECT_DIR/config/locale/" ]]; then
     fi;
 
     echo "[strata-deploy-common] Applying local strings back in the project...."
-    sh strata i18n scan
+    sh $RELEASE_DIR/strata i18n extract
     echo "[strata-deploy-common] Done."
 
 else
