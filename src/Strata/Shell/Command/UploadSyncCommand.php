@@ -10,7 +10,7 @@ use InvalidArgumentException;
 
 use Strata\Strata;
 
-class SyncUploadCommand extends StrataCommandBase
+class UploadSyncCommand extends StrataCommandBase
 {
     private $project;
     private $direction;
@@ -24,7 +24,7 @@ class SyncUploadCommand extends StrataCommandBase
     protected function configure()
     {
         $this
-            ->setName('sync-uploads')
+            ->setName('uploads-sync')
             ->setDescription('Syncs the local ~/upload directory with a remote versio of the directory.')
             ->addArgument(
                 'direction',
