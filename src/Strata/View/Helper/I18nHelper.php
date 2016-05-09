@@ -41,7 +41,7 @@ class I18nHelper extends \Strata\View\Helper\Helper {
         $currentLocale = $this->getCurrentLocale();
         $translatedPost = $locale->getTranslatedPost();
 
-        if ($translatedPost) {
+        if ($translatedPost && $translatedPost->post_status === "publish") {
             if ((bool)Strata::config("i18n.default_locale_fallback")) {
                 $replace = $currentLocale->getHomeUrl();
                 $replacement = $locale->getHomeUrl();
@@ -53,7 +53,7 @@ class I18nHelper extends \Strata\View\Helper\Helper {
 
         if ((bool)Strata::config("i18n.default_locale_fallback")) {
             $originalPost = $this->getDefaultLocale()->getTranslatedPost(get_the_ID());
-            if ($originalPost) {
+            if ($originalPost && $originalPost->post_status === "publish") {
                 $originalUrl = get_permalink($originalPost);
                 $replace = $currentLocale->getHomeUrl();
                 $replacement = $locale->getHomeUrl();
