@@ -15,9 +15,9 @@ trait DatedTrait {
         return get_field($this->getAcfDateKey(), $this->ID);
     }
 
-    public function getFormattedDate()
+    public function getFormattedDate($format = "%h %e")
     {
-        return date("M dS", $this->getAcfDateTimestamp());
+        return strftime($format, $this->getAcfDateTimestamp());
     }
 
     public function getAcfDateTimestamp()
