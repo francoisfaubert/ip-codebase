@@ -2,6 +2,8 @@
 namespace IP\Code\Strata\View\Helper;
 
 use Polyglot\Plugin\Polyglot;
+use Polyglot\I18n\Permalink\PostPermalinkManager;
+use Polyglot\I18n\Permalink\TermPermalinkManager;
 use IP\Code\Common\SlugTrait;
 use Strata\Strata;
 
@@ -38,31 +40,34 @@ class I18nHelper extends \Strata\View\Helper\Helper {
 
     public function getCurrentUrlIn($locale)
     {
-        $currentLocale = $this->getCurrentLocale();
-        $translatedPost = $locale->getTranslatedPost();
-
-        if ($translatedPost && $translatedPost->post_status === "publish") {
-            if ((bool)Strata::config("i18n.default_locale_fallback")) {
-                $replace = $currentLocale->getHomeUrl();
-                $replacement = $locale->getHomeUrl();
-                return str_replace($replace, $replacement, get_permalink($translatedPost->ID));
-            }
-
-            return get_permalink($translatedPost->ID);
+        $currentPost = get_post();
+        if ($currentPost) {
+            return $this->getPostUrlIn($currentPost, $locale, get_permalink($currentPost));
         }
 
-        if ((bool)Strata::config("i18n.default_locale_fallback")) {
-            $originalPost = $this->getDefaultLocale()->getTranslatedPost(get_the_ID());
-            if ($originalPost && $originalPost->post_status === "publish") {
-                $originalUrl = get_permalink($originalPost);
-                $replace = $currentLocale->getHomeUrl();
-                $replacement = $locale->getHomeUrl();
-                return str_replace($replace, $replacement, $originalUrl);
-            }
+        global $wp_query;
+        $taxonomy = $wp_query->queried_object;
+        if (is_a($taxonomy, "WP_Term")) {
+            return $this->getTermUrlIn($taxonomy, $locale, get_term_link($taxonomy, $taxonomy->taxonomy));
         }
 
         return $locale->getHomeUrl();
     }
+
+    public function getPostUrlIn($post, $locale, $currentUrl)
+    {
+        $permalinkManager = new PostPermalinkManager();
+        $permalinkManager->enforceLocale($locale);
+        return $permalinkManager->generatePermalink($currentUrl, $post->ID);
+    }
+
+    public function getTermUrlIn($taxonomy, $locale, $currentUrl)
+    {
+        $permalinkManager = new TermPermalinkManager();
+        $permalinkManager->enforceLocale($locale);
+        return $permalinkManager->generatePermalink($currentUrl, $taxonomy);
+    }
+
 
     public function getTranslatedId($pageId)
     {
