@@ -40,15 +40,23 @@ class I18nHelper extends \Strata\View\Helper\Helper {
 
     public function getCurrentUrlIn($locale)
     {
-        $currentPost = get_post();
-        if ($currentPost) {
-            return $this->getPostUrlIn($currentPost, $locale, get_permalink($currentPost));
+        if (!is_archive()) {
+            $currentPost = get_post();
+            if ($currentPost) {
+                return $this->getPostUrlIn($currentPost, $locale, get_permalink($currentPost));
+            }
         }
 
         global $wp_query;
-        $taxonomy = $wp_query->queried_object;
-        if (is_a($taxonomy, "WP_Term")) {
-            return $this->getTermUrlIn($taxonomy, $locale, get_term_link($taxonomy, $taxonomy->taxonomy));
+
+        if ((bool)$wp_query->is_tax) {
+            $term = get_term_by("slug", $wp_query->query_vars['term'], $wp_query->query_vars['taxonomy']);
+            return $this->getTermUrlIn($term, $locale, get_term_link($term, $term->taxonomy));
+        }
+
+        if ($wp_query->queried_object && get_class($wp_query->queried_object) === "WP_Term") {
+            $term = $wp_query->queried_object;
+            return $this->getTermUrlIn($term, $locale, get_term_link($term, $term->taxonomy));
         }
 
         return $locale->getHomeUrl();
@@ -61,11 +69,11 @@ class I18nHelper extends \Strata\View\Helper\Helper {
         return $permalinkManager->generatePermalink($currentUrl, $post->ID);
     }
 
-    public function getTermUrlIn($taxonomy, $locale, $currentUrl)
+    public function getTermUrlIn($term, $locale, $currentUrl)
     {
         $permalinkManager = new TermPermalinkManager();
         $permalinkManager->enforceLocale($locale);
-        return $permalinkManager->generatePermalink($currentUrl, $taxonomy);
+        return $permalinkManager->generatePermalink($currentUrl, $term->taxonomy);
     }
 
 
