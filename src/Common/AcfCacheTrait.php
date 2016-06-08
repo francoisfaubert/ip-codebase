@@ -91,6 +91,11 @@ trait AcfCacheTrait {
 
     private function getFields($id)
     {
+        if (!function_exists("get_fields")) {
+             $this->log("ACF plugin is not enabled.");
+            return;
+        }
+
         $startedAt = microtime(true);
         $this->cache[$this->getCacheKey($id)] = (array)get_fields($id);
         $completion = microtime(true) - $startedAt;
@@ -102,7 +107,9 @@ trait AcfCacheTrait {
 
     protected function log($call)
     {
-
+        if (class_exists("Strata\Strata")) {
+            Strata::app()->log($call);
+        }
     }
 
 }
