@@ -6,6 +6,7 @@ use Polyglot\I18n\Permalink\PostPermalinkManager;
 use Polyglot\I18n\Permalink\TermPermalinkManager;
 use IP\Code\Common\SlugTrait;
 use Strata\Strata;
+use Exception;
 
 class I18nHelper extends \Strata\View\Helper\Helper {
 
@@ -40,23 +41,28 @@ class I18nHelper extends \Strata\View\Helper\Helper {
 
     public function getCurrentUrlIn($locale)
     {
-        if (!is_archive()) {
-            $currentPost = get_post();
-            if ($currentPost) {
-                return $this->getPostUrlIn($currentPost, $locale, get_permalink($currentPost));
+        try {
+            if (!is_archive()) {
+                $currentPost = get_post();
+                if ($currentPost) {
+                    return $this->getPostUrlIn($currentPost, $locale, get_permalink($currentPost));
+                }
             }
-        }
 
-        global $wp_query;
+            global $wp_query;
 
-        if ((bool)$wp_query->is_tax) {
-            $term = get_term_by("slug", $wp_query->query_vars['term'], $wp_query->query_vars['taxonomy']);
-            return $this->getTermUrlIn($term, $locale, get_term_link($term, $term->taxonomy));
-        }
+            if ((bool)$wp_query->is_tax) {
+                $term = get_term_by("slug", $wp_query->query_vars['term'], $wp_query->query_vars['taxonomy']);
+                return $this->getTermUrlIn($term, $locale, get_term_link($term, $term->taxonomy));
+            }
 
-        if ($wp_query->queried_object && get_class($wp_query->queried_object) === "WP_Term") {
-            $term = $wp_query->queried_object;
-            return $this->getTermUrlIn($term, $locale, get_term_link($term, $term->taxonomy));
+            if ($wp_query->queried_object && get_class($wp_query->queried_object) === "WP_Term") {
+                $term = $wp_query->queried_object;
+                return $this->getTermUrlIn($term, $locale, get_term_link($term, $term->taxonomy));
+            }
+
+        } catch (Exception $e) {
+
         }
 
         return $locale->getHomeUrl();
@@ -73,9 +79,8 @@ class I18nHelper extends \Strata\View\Helper\Helper {
     {
         $permalinkManager = new TermPermalinkManager();
         $permalinkManager->enforceLocale($locale);
-        return $permalinkManager->generatePermalink($currentUrl, $term->taxonomy);
+        return $permalinkManager->generatePermalink($currentUrl, $term, $term->taxonomy);
     }
-
 
     public function getTranslatedId($pageId)
     {
