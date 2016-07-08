@@ -42,6 +42,11 @@ class I18nHelper extends \Strata\View\Helper\Helper {
     public function getCurrentUrlIn($locale)
     {
         try {
+
+            if (is_404()) {
+                return $locale->getHomeUrl();
+            }
+
             if (!is_archive()) {
                 $currentPost = get_post();
                 if ($currentPost) {
