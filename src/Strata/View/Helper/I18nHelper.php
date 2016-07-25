@@ -1,7 +1,6 @@
 <?php
 namespace IP\Code\Strata\View\Helper;
 
-use Polyglot\Plugin\Polyglot;
 use Polyglot\I18n\Permalink\PostPermalinkManager;
 use Polyglot\I18n\Permalink\TermPermalinkManager;
 use IP\Code\Common\SlugTrait;
@@ -45,6 +44,11 @@ class I18nHelper extends \Strata\View\Helper\Helper {
 
             if (is_404()) {
                 return $locale->getHomeUrl();
+            }
+
+            if (is_search()) {
+                global $wp_query;
+                return $locale->getHomeUrl() . "?s=" . urlencode($wp_query->query_vars['s']);
             }
 
             if (!is_archive()) {
