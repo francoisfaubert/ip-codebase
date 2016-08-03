@@ -41,7 +41,7 @@ fi
 
 # Create frontend bundle package
 echo "[strata-build-common] Running frontend bundle..."
-export PATH="$PATH:/opt/node-0.12/bin/"
+export PATH="$PATH:/opt/node-v0.10.35-linux-x64/bin/"
 
 stdbuf -oL $ROOT_DIR/strata bundle |
   while read -r line;  do
