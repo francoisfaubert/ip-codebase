@@ -43,13 +43,16 @@ fi
 echo "[strata-build-common] Running frontend bundle..."
 export PATH="$PATH:/opt/node-v0.10.35-linux-x64/bin/"
 
-stdbuf -oL $ROOT_DIR/strata bundle |
-  while read -r line;  do
-    if [[ $line == *Error:\ * ]]; then
-        exit 500
-    fi
-    sleep 1
-  done
+$ROOT_DIR/strata bundle
+
+# @todo : figure out why bundle's buffer does not end on Ubuntu
+#stdbuf -oL $ROOT_DIR/strata bundle |
+#  while read -r line;  do
+#    if [[ $line == *Error:\ * ]]; then
+#        exit 500
+#    fi
+#    sleep 1
+#  done
 echo "[strata-build-common] Done"
 
 echo "[strata-build-common] Completed successfully."
