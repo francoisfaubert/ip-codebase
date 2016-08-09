@@ -35,6 +35,9 @@ tar -czvf release.tar.gz -C ${bamboo_build_working_directory} .
 mv release.tar.gz ${bamboo_build_working_directory}
 echo "[strata-package-common] Done"
 
+echo "[strata-package-common] Refreshing sshd."
+sudo service sshd restart
+echo "[strata-package-common] Done"
 
 echo "[strata-package-common] Completed successfully."
 
