@@ -92,15 +92,27 @@ class BundleCommand extends \Strata\Shell\Command\StrataCommandBase {
     {
         $this->output->writeln("Updating <info>NPM</info>...");
         $this->nl();
-        system("cd $themePath && npm install");
+        system("cd $themePath && npm install", $status);
+
+        $this->nl();
+
+        if ($status !== 0) {
+            throw new Exception("Command did not exit with 0 status.");
+        }
     }
 
     private function buildBower($themePath)
     {
         $this->output->writeln("Updating <info>Bower</info>...");
         $this->nl();
-        system("cd $themePath && bower install --allow-root");
+
+        system("cd $themePath && bower install --allow-root", $status);
+
         $this->nl();
+
+        if ($status !== 0) {
+            throw new Exception("Command did not exit with 0 status.");
+        }
     }
 
     private function buildGrunt($themePath)
@@ -109,8 +121,13 @@ class BundleCommand extends \Strata\Shell\Command\StrataCommandBase {
         $this->nl();
 
         $command = WP_ENV === "development" ? "staging" : WP_ENV;
-        system("cd $themePath && grunt " . $command);
+        system("cd $themePath && grunt " . $command, $status);
+
         $this->nl();
+
+        if ($status !== 0) {
+            throw new Exception("Command did not exit with 0 status.");
+        }
     }
 
     private function buildGulp($themePath)
@@ -119,7 +136,12 @@ class BundleCommand extends \Strata\Shell\Command\StrataCommandBase {
         $this->nl();
 
         $command = WP_ENV === "production" ? "--production" : "";
-        system("cd $themePath && gulp " . $command);
+        system("cd $themePath && gulp " . $command, $status);
+
         $this->nl();
+
+        if ($status !== 0) {
+            throw new Exception("Command did not exit with 0 status.");
+        }
     }
 }
