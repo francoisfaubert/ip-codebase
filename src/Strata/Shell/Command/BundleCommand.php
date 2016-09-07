@@ -3,6 +3,7 @@ namespace IP\Code\Strata\Shell\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Exception;
 
 /**
  * The bundle command will ensure the application is correctly configured
